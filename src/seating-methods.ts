@@ -6,18 +6,20 @@ export function random(plane: Plane, passengers: Array<Person>) {
 }
 
 export function windowToAisle(plane: Plane, passengers: Array<Person>) {
+  const aisle: number = plane.columns / 2;
   return passengers.sort(
     (personA: Person, personB: Person): number =>
-      Math.abs(personB.ticket.seatInRow - this.aisle) -
-      Math.abs(personA.ticket.seatInRow - this.aisle)
+      Math.abs(personB.ticket.seatInRow - aisle) -
+      Math.abs(personA.ticket.seatInRow - aisle)
   );
 }
 
 export function aisleToWindow(plane: Plane, passengers: Array<Person>) {
+  const aisle: number = plane.columns / 2;
   return passengers.sort(
     (personA: Person, personB: Person): number =>
-      Math.abs(personA.ticket.seatInRow - this.aisle) -
-      Math.abs(personB.ticket.seatInRow - this.aisle)
+      Math.abs(personA.ticket.seatInRow - aisle) -
+      Math.abs(personB.ticket.seatInRow - aisle)
   );
 }
 
