@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/zivpiz/boarding-simulation#readme",
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "ramda": "^0.26.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
