@@ -1,14 +1,12 @@
-import * as _ from 'lodash'
-import { Person, Plane } from './types'
+import * as _ from "lodash";
+import { Person, Plane } from "./types";
 
 const simulateBoarding = (plane: Plane, queue: Array<Person>): number => {
-  let iterations = 0
+  let iterations = 0;
 
-  while(_.some(queue, person => person.isSeated)){
-    iterations++
-
-
+  while (_.some(queue, person => person.isSeated)) {
+    iterations++;
   }
 
-  return iterations
-}
+  return iterations;
+};
