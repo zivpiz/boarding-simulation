@@ -1,8 +1,8 @@
-import { AisleBlock, Plane, Seat } from "./types";
+import { AisleBlock, Plane, Seat, SeatStatus } from "./types";
 
 const createEmptyRow = (numOfSeats: number): Array<Seat> => {
   return new Array(numOfSeats).fill({
-    taken: false
+    status: SeatStatus.FREE
   });
 };
 
@@ -10,7 +10,9 @@ const createAisleBlockWithRows = (seatsInRow: number): AisleBlock => {
   return {
     hasRows: true,
     rightRow: createEmptyRow(seatsInRow),
-    leftRow: createEmptyRow(seatsInRow)
+    leftRow: createEmptyRow(seatsInRow),
+    assignedSeats: 0,
+    fullyAssigned: false
   };
 };
 

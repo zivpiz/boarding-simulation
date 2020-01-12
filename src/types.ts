@@ -16,11 +16,23 @@ export type AisleBlock = {
   hasRows: boolean;
   rightRow: Array<Seat>;
   leftRow: Array<Seat>;
+  assignedSeats: number;
+  fullyAssigned: boolean;
 };
 
+export enum SeatStatus {
+  FREE = "free",
+  ASSIGNED = "assigned",
+  TAKEN = "taken"
+}
+
 export type Seat = {
-  taken: boolean;
+  status: SeatStatus;
 };
+
+export enum TicketAssignmetMode {
+  RANDOM = "random"
+}
 
 export type Person = {
   isSeated: boolean;
