@@ -1,4 +1,4 @@
-import { AisleBlock, Plane, Seat, SeatStatus } from "./types";
+import { AisleBlock, EmptyAisleBlock, Plane, Seat, SeatStatus } from "./types";
 
 const createEmptyRow = (numOfSeats: number): Array<Seat> => {
   return new Array(numOfSeats).fill({
@@ -16,22 +16,27 @@ const createAisleBlockWithRows = (seatsInRow: number): AisleBlock => {
   };
 };
 
-const createAisleBlockWithoutRows = () => {
+const createAisleBlockWithoutRows = (): EmptyAisleBlock => {
   return { hasRows: false };
 };
 
 export const createPlane = (
-  numOfLines: number,
-  spaceBetweenLines: number,
+  seatsRows: number,
+  spaceBetweenRows: number,
   seatsInRow: number
 ): Plane => {
-  const aisle = [];
+  const numberOfRows = seatsRows + (seatsRows - 1) * spaceBetweenRows;
+  const aisle = new Array<AisleBlock | EmptyAisleBlock>(numberOfRows);
 
-  for (let i = 0; i < numOfLines; i++) {
-    if (i % spaceBetweenLines === 0)
+  for (let i = 0; i < numberOfRows; i++) {
+    if (i % (spaceBetweenRows + 1) === 0)
       aisle[i] = createAisleBlockWithRows(seatsInRow);
     else aisle[i] = createAisleBlockWithoutRows();
   }
 
-  return { aisle };
+  return {
+    rows: seatsRows,
+    columns: seatsInRow,
+    aisle: aisle
+  };
 };

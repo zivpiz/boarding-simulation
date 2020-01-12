@@ -1,7 +1,7 @@
 export type Plane = {
   rows: number;
   columns: number;
-  aisle: Array<AisleBlock>;
+  aisle: Array<AisleBlock | EmptyAisleBlock>;
 };
 
 export enum SeatingMode {
@@ -18,6 +18,10 @@ export type AisleBlock = {
   leftRow: Array<Seat>;
   assignedSeats: number;
   fullyAssigned: boolean;
+};
+
+export type EmptyAisleBlock = {
+  hasRows: boolean;
 };
 
 export enum SeatStatus {
