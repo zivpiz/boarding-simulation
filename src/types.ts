@@ -1,6 +1,7 @@
 export type Plane = {
   rows: number;
   columns: number;
+  spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
 };
 
@@ -48,3 +49,9 @@ export type Person = {
     seatInRow: number;
   };
 };
+
+export enum Speed {
+  X = "Row_Speed",
+  Y = "Aisle_Speed",
+  LUGGADE = "Luggage_Delay"
+}

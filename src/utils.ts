@@ -37,6 +37,21 @@ export const createPlane = (
   return {
     rows: seatsRows,
     columns: seatsInRow,
+    spaceBetweenRows: spaceBetweenRows,
     aisle: aisle
   };
+};
+
+export const initPlaneSeats = (plane: Plane): Plane => {
+  plane.aisle.forEach(block => {
+    if (block.hasRows) {
+      (<AisleBlock>block).leftRow.forEach(
+        seat => (seat.status = SeatStatus.FREE)
+      );
+      (<AisleBlock>block).rightRow.forEach(
+        seat => (seat.status = SeatStatus.FREE)
+      );
+    }
+  });
+  return plane;
 };
