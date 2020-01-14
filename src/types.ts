@@ -67,3 +67,8 @@ export enum Speed {
   Y = "Aisle_Speed",
   LUGGADE = "Luggage_Delay"
 }
+
+export enum Person_Mode {
+  FORWARD = "FORWARD",
+  BACKWARD = "BACKWARD",
+}

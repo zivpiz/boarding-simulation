@@ -11,7 +11,7 @@ import {
 import { createPlane, initPlaneSeats } from "./utils";
 import * as ticketingMethods from "./ticketing-methods";
 
-class Passengers {
+export default class Passengers {
   private passengers: Array<Person>;
   private plane: Plane;
 
