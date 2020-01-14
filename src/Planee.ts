@@ -14,7 +14,7 @@ export class Plane implements IPlane {
     spaceBetweenRows: number;
     aisle: (AisleBlock | EmptyAisleBlock)[];
     stepPassanger(passanger: Person): void {
-        
+        passanger.
         throw new Error("Method not implemented.");
     }
 }
