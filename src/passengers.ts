@@ -36,4 +36,8 @@ class Passengers {
         return ticketingMethods.assignRandomly(this.plane, this.passengers);
     }
   }
+
+  getPassengers() {
+    return this.passengers;
+  }
 }
