@@ -9,7 +9,11 @@ const createEmptyRow = (
   return seats.map((seat: Seat, index: number) => {
     return dir === "left"
       ? { status: SeatStatus.FREE, row: rowNumber, column: index }
-      : { status: SeatStatus.FREE, row: rowNumber, column: index + numOfSeats };
+      : {
+          status: SeatStatus.FREE,
+          row: rowNumber,
+          column: index + numOfSeats + 1
+        };
   });
 };
 
