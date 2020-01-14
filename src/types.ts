@@ -19,10 +19,19 @@ export type AisleBlock = {
   leftRow: Array<Seat>;
   assignedSeats: number;
   fullyAssigned: boolean;
+  id: number;
 };
 
 export type EmptyAisleBlock = {
   hasRows: boolean;
+};
+
+export const isAisleBlock = (x: any): x is AisleBlock => {
+  return x.hasRows === true;
+};
+
+export const isEmptyAisleBlock = (x: any): x is EmptyAisleBlock => {
+  return x.hasRows === false;
 };
 
 export enum SeatStatus {
@@ -33,6 +42,8 @@ export enum SeatStatus {
 
 export type Seat = {
   status: SeatStatus;
+  row: number;
+  column: number;
 };
 
 export enum TicketAssignmetMode {
