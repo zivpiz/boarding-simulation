@@ -17,6 +17,7 @@ export type AisleBlock = {
   hasRows: boolean;
   rightRow: Array<Seat>;
   leftRow: Array<Seat>;
+  center: Person;
   assignedSeats: number;
   fullyAssigned: boolean;
   id: number;
