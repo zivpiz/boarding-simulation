@@ -8,8 +8,8 @@ import {
   Speed
 } from "./types";
 
-import { createPlane, initPlaneSeats } from "./utils";
-import * as ticketingMethods from "./ticketing-methods";
+import { createPlane, initPlaneSeats } from "../utils";
+import * as ticketingMethods from "../Strategies/ticketing-methods";
 
 export default class Passengers {
   private passengers: Array<Person>;

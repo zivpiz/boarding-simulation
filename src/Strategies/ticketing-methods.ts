@@ -6,7 +6,7 @@ import {
   AisleBlock,
   Seat,
   SeatStatus
-} from "./types";
+} from "../Models/types";
 import * as _ from "lodash";
 
 //max speed must be grater then 0 --> can cause error

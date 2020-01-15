@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Person, Plane } from "./types";
+import { Person, Plane } from "../Models/types";
 
 export function random(plane: Plane, passengers: Array<Person>) {
   return _.shuffle(passengers);

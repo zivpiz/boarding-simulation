@@ -17,7 +17,7 @@ export type AisleBlock = {
   hasRows: boolean;
   rightRow: Array<Seat>;
   leftRow: Array<Seat>;
-  center: Person;
+  occupied: Person;
   assignedSeats: number;
   fullyAssigned: boolean;
   id: number;
@@ -25,6 +25,7 @@ export type AisleBlock = {
 
 export type EmptyAisleBlock = {
   hasRows: boolean;
+  occupied: Person;
 };
 
 export const isAisleBlock = (x: any): x is AisleBlock => {
@@ -51,6 +52,11 @@ export enum TicketAssignmetMode {
   RANDOM = "random"
 }
 
+export type Position = {
+  row: number;
+  column: number;
+};
+
 export type Person = {
   isSeated: boolean;
   xSpeed: number;
@@ -70,5 +76,5 @@ export enum Speed {
 
 export enum Person_Mode {
   FORWARD = "FORWARD",
-  BACKWARD = "BACKWARD",
+  BACKWARD = "BACKWARD"
 }

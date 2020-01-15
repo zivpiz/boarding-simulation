@@ -1,4 +1,10 @@
-import { AisleBlock, EmptyAisleBlock, Plane, Seat, SeatStatus } from "./types";
+import {
+  AisleBlock,
+  EmptyAisleBlock,
+  Plane,
+  Seat,
+  SeatStatus
+} from "./Models/types";
 
 const createEmptyRow = (
   rowNumber: number,
@@ -27,12 +33,13 @@ const createAisleBlockWithRows = (
     leftRow: createEmptyRow(rowNumber, seatsInRow, "left"),
     assignedSeats: 0,
     fullyAssigned: false,
-    id: rowNumber
+    id: rowNumber,
+    occupied: null
   };
 };
 
 const createAisleBlockWithoutRows = (): EmptyAisleBlock => {
-  return { hasRows: false };
+  return { hasRows: false, occupied: null };
 };
 
 export const createPlane = (
