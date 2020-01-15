@@ -49,18 +49,14 @@ export interface IPlane {
   initSeats(): void;
 }
 
-export interface IBoardingQueue {
+export interface IManager {
   queueMode: SeatingMode;
   passengers: Passengers;
   queue: Array<IPerson>;
   sitting: Set<IPerson>;
 
-  //create sort queue by mode.
-  //set Persons frontPerson and BackPerson by mode
-  create(plane: IPlane, passengers: IPassengers): IBoardingQueue;
-
-  //return passengers.getPassengers()
   getQueue(): Array<IPerson>;
+  getSitiing(): Set<IPerson>;
 
   //remove passenger from sitting set and
   //push person to queue after "after" position
@@ -79,28 +75,32 @@ export interface IPassengers {
   passengers: Array<IPerson>;
   plane: Plane;
 
+  getPassengers(): Array<IPerson>;
+
   //assign tickets to passengers by mode
   //return passengers
   assignTicketsBy(mode: TicketAssignmetMode): Array<IPerson>;
 
-  getPassengers(): Array<IPerson>;
+  //create sort queue by mode.
+  //set Persons frontPerson and BackPerson by mode
+  boardingBy(plane: IPlane, passengers: IPassengers): Array<IPerson>;
 }
 
 export interface ISimulator {
   plane: Plane;
   passangers: Passengers;
-  boardingQ: IBoardingQueue;
+  manager: IManager;
   iterations: number;
 
   //return set of persons that blocking person from sitting
   seatBlockedBy(person: IPerson): Set<IPerson>;
 
   //ask all group persons to set their target
-  //adds all group members to boardingQ for the next iteration
+  //adds all group members to manager.queue for the next iteration
   askToChangeTargets(group: Set<IPerson>): Array<IPerson>;
 
   //while not all passengers sitting
-  //foreach boardingQ.queue: person, person.step()
+  //foreach manager.queue: person, person.step()
   //if person.step() === true && seatBlockedBy(person) --> askToChangeTargets
   //iterations++
   //returns iterations

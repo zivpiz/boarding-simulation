@@ -4,13 +4,13 @@ import * as seatingMethods from "../Strategies/seating-methods";
 import { SeatingMode } from "./types";
 import Person from "./Person";
 import Plane from "./Plane";
-import { IBoardingQueue } from "./interfaces";
+import { IManager } from "./interfaces";
 
 // Usage:
 // bq = new BoardingQueue(plane).create(passengers);
 // or bq = BoardingQueue.composeSeatingMode()
 
-class BoardingQueue implements IBoardingQueue {
+class Manager implements IManager {
   private aisle: number;
 
   constructor(plane: Plane) {
@@ -47,4 +47,4 @@ class BoardingQueue implements IBoardingQueue {
   }
 }
 
-export default BoardingQueue;
+export default Manager;
