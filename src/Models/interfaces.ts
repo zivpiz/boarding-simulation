@@ -58,6 +58,9 @@ export interface IManager {
   getQueue(): Array<IPerson>;
   getSitiing(): Set<IPerson>;
 
+  //return set of persons that blocking person from sitting
+  seatBlockedBy(person: IPerson): Set<IPerson>;
+
   //remove passenger from sitting set and
   //push person to queue after "after" position
   //and set his frontPerson and backPerson
@@ -95,9 +98,10 @@ export interface ISimulator {
   //return set of persons that blocking person from sitting
   seatBlockedBy(person: IPerson): Set<IPerson>;
 
-  //ask all group persons to set their target
+  //ask all group members to set their target
+  //the group new target = seat.y+group.size
   //adds all group members to manager.queue for the next iteration
-  askToChangeTargets(group: Set<IPerson>): Array<IPerson>;
+  askToClearSeatWay(group: Set<IPerson>): Array<IPerson>;
 
   //while not all passengers sitting
   //foreach manager.queue: person, person.step()
