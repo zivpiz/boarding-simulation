@@ -52,13 +52,17 @@ export type Position = {
   column: number;
 };
 
+export const isEqualPos = (pos1: Position, pos2: Position): boolean => {
+  return pos1.row === pos2.row && pos1.column === pos2.column;
+};
+
 export enum Speed {
   X = "Row_Speed",
   Y = "Aisle_Speed",
   LUGGADE = "Luggage_Delay"
 }
 
-export enum Person_Mode {
+export enum Direction {
   FORWARD = "FORWARD",
   BACKWARD = "BACKWARD"
 }

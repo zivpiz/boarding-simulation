@@ -1,7 +1,7 @@
 import Passengers from "./Passengers";
 import Plane from "./plane";
 import {
-  Person_Mode,
+  Direction,
   AisleBlock,
   EmptyAisleBlock,
   Position,
@@ -18,11 +18,17 @@ export interface IPerson {
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
-  asked: IPerson; //save the person who asked to change target
-  direction: Person_Mode; //person movement direction
+  //   asked: IPerson; //save the person who asked to change target
+  direction: Direction; //person movement direction
 
   setFrontPerson(person: IPerson): void;
   setBackPerson(person: IPerson): void;
+  setTicket(ticket: Position): void;
+  setPosition(position: Position): void;
+  setTarget(newTarget: Position): void;
+
+  getTicket(): Position;
+  getPosition(): Position;
 
   //Step to the target. Ask frontPerson/ backPerson to change target if needed
   //called by simulator
@@ -30,8 +36,6 @@ export interface IPerson {
   step(): boolean;
   //ask blocker to change his target
   askToChangeTarget(blocker: IPerson, newTarget: Position): void;
-  //set this target to newTarget;
-  setTarget(newTarget: Position): boolean;
   //change this person target to his ticket position
   backToSeat(): void;
   //return true if this person at target
