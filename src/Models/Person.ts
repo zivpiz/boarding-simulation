@@ -5,8 +5,9 @@ class Person implements IPerson {
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage
-  ticket: Position | null;
+  position: Position; //current position
   target: Position; //next positon to be at
+  ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
   asked: IPerson; //save the person who asked to change target
@@ -21,7 +22,7 @@ class Person implements IPerson {
     }
   }
 
-  step(): void {
+  step(): boolean {
     throw "implementation";
   }
 

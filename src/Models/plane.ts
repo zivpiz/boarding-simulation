@@ -1,8 +1,9 @@
-import { AisleBlock, EmptyAisleBlock, Person } from "./types";
+import { AisleBlock, EmptyAisleBlock, SeatStatus } from "./types";
 import {
   createAisleBlockWithRows,
   createAisleBlockWithoutRows
 } from "../utils";
+import Person from "./Person";
 import { IPlane } from "./interfaces";
 
 class Plane implements IPlane {
@@ -30,6 +31,19 @@ class Plane implements IPlane {
 
   getAisle(): Array<AisleBlock | EmptyAisleBlock> {
     return this.aisle;
+  }
+
+  initSeats() {
+    this.aisle.forEach(block => {
+      if (block.hasRows) {
+        (<AisleBlock>block).leftRow.forEach(
+          seat => (seat.status = SeatStatus.FREE)
+        );
+        (<AisleBlock>block).rightRow.forEach(
+          seat => (seat.status = SeatStatus.FREE)
+        );
+      }
+    });
   }
 }
 

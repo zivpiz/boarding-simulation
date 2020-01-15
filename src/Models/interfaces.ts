@@ -1,11 +1,21 @@
-import { Person_Mode, AisleBlock, EmptyAisleBlock, Position } from "./types";
+import Passengers from "./Passengers";
+import Plane from "./plane";
+import {
+  Person_Mode,
+  AisleBlock,
+  EmptyAisleBlock,
+  Position,
+  SeatingMode,
+  TicketAssignmetMode
+} from "./types";
 
 export interface IPerson {
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage
-  ticket: Position | null;
+  position: Position; //current position
   target: Position; //next positon to be at
+  ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
   asked: IPerson; //save the person who asked to change target
@@ -16,11 +26,12 @@ export interface IPerson {
 
   //Step to the target. Ask frontPerson/ backPerson to change target if needed
   //called by simulator
-  step(): void;
+  //return true if at this seat aisle
+  step(): boolean;
   //ask blocker to change his target
   askToChangeTarget(blocker: IPerson, newTarget: Position): void;
-  //change this target to newTarget;
-  answerTargetChanging(newTarget: Position): boolean;
+  //set this target to newTarget;
+  setTarget(newTarget: Position): boolean;
   //change this person target to his ticket position
   backToSeat(): void;
   //return true if this person at target
@@ -28,8 +39,70 @@ export interface IPerson {
 }
 
 export interface IPlane {
-  rows: number;
-  columns: number;
+  rows: number; //includes AisleBlock and EmptyAisleBlock
+  columns: number; // includes the aisle/center column
   spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
+  centerColumn: number; // center column index
+
+  getAisle(): Array<AisleBlock | EmptyAisleBlock>;
+  initSeats(): void;
+}
+
+export interface IBoardingQueue {
+  queueMode: SeatingMode;
+  passengers: Passengers;
+  queue: Array<IPerson>;
+  sitting: Set<IPerson>;
+
+  //create sort queue by mode.
+  //set Persons frontPerson and BackPerson by mode
+  create(plane: IPlane, passengers: IPassengers): IBoardingQueue;
+
+  //return passengers.getPassengers()
+  getQueue(): Array<IPerson>;
+
+  //remove passenger from sitting set and
+  //push person to queue after "after" position
+  //and set his frontPerson and backPerson
+  //return queue
+  addToQueue(passenger: IPerson, after: number): Array<IPerson>;
+
+  //remove persons set from queue,
+  //set others frontPerson and backPerson
+  //and add person to sitting set
+  //return queue
+  removeFromQueue(passengers: Set<IPerson>): Array<IPerson>;
+}
+
+export interface IPassengers {
+  passengers: Array<IPerson>;
+  plane: Plane;
+
+  //assign tickets to passengers by mode
+  //return passengers
+  assignTicketsBy(mode: TicketAssignmetMode): Array<IPerson>;
+
+  getPassengers(): Array<IPerson>;
+}
+
+export interface ISimulator {
+  plane: Plane;
+  passangers: Passengers;
+  boardingQ: IBoardingQueue;
+  iterations: number;
+
+  //return set of persons that blocking person from sitting
+  seatBlockedBy(person: IPerson): Set<IPerson>;
+
+  //ask all group persons to set their target
+  //adds all group members to boardingQ for the next iteration
+  askToChangeTargets(group: Set<IPerson>): Array<IPerson>;
+
+  //while not all passengers sitting
+  //foreach boardingQ.queue: person, person.step()
+  //if person.step() === true && seatBlockedBy(person) --> askToChangeTargets
+  //iterations++
+  //returns iterations
+  simulate(): number;
 }

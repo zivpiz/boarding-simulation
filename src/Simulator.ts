@@ -13,12 +13,6 @@ const simulateBoarding = (plane: Plane, queue: Array<Person>): number => {
   return iterations;
 };
 
-export interface ISimulator {
-  plane: Plane;
-  passangers: Passengers;
-  runSimulator(): number;
-}
-
 export class Simulator implements ISimulator {
   plane: Plane;
   passangers: Passengers;

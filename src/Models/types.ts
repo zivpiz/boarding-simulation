@@ -1,3 +1,5 @@
+import { IPerson } from "./interfaces";
+
 export enum SeatingMode {
   RANDOM = "random",
   AISLE_TO_WINDOW = "aisle_to_window",
@@ -10,7 +12,7 @@ export type AisleBlock = {
   hasRows: boolean;
   rightRow: Array<Seat>;
   leftRow: Array<Seat>;
-  occupied: Person;
+  occupied: IPerson | null;
   assignedSeats: number;
   fullyAssigned: boolean;
   id: number;
@@ -18,7 +20,7 @@ export type AisleBlock = {
 
 export type EmptyAisleBlock = {
   hasRows: boolean;
-  occupied: Person;
+  occupied: IPerson;
 };
 
 export const isAisleBlock = (x: any): x is AisleBlock => {
@@ -48,17 +50,6 @@ export enum TicketAssignmetMode {
 export type Position = {
   row: number;
   column: number;
-};
-
-export type Person = {
-  isSeated: boolean;
-  xSpeed: number;
-  ySpeed: number;
-  luggageDelay: number;
-  ticket: {
-    row: number;
-    seatInRow: number;
-  };
 };
 
 export enum Speed {

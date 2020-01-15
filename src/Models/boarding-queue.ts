@@ -1,14 +1,16 @@
 import * as _ from "lodash";
 import * as R from "ramda";
 import * as seatingMethods from "../Strategies/seating-methods";
-import { Person, SeatingMode } from "./types";
+import { SeatingMode } from "./types";
+import Person from "./Person";
 import Plane from "./Plane";
+import { IBoardingQueue } from "./interfaces";
 
 // Usage:
 // bq = new BoardingQueue(plane).create(passengers);
 // or bq = BoardingQueue.composeSeatingMode()
 
-class BoardingQueue {
+class BoardingQueue implements IBoardingQueue {
   private aisle: number;
 
   constructor(plane: Plane) {
