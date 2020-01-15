@@ -1,10 +1,3 @@
-export type Plane = {
-  rows: number;
-  columns: number;
-  spaceBetweenRows: number;
-  aisle: Array<AisleBlock | EmptyAisleBlock>;
-};
-
 export enum SeatingMode {
   RANDOM = "random",
   AISLE_TO_WINDOW = "aisle_to_window",

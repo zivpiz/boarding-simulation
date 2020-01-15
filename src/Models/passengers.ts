@@ -1,6 +1,4 @@
 import {
-  Plane,
-  Person,
   SeatingMode,
   SeatStatus,
   TicketAssignmetMode,
@@ -8,7 +6,9 @@ import {
   Speed
 } from "./types";
 
-import { createPlane, initPlaneSeats } from "../utils";
+import { initPlaneSeats } from "../utils";
+import Plane from "./Plane";
+import Person from "./Person";
 import * as ticketingMethods from "../Strategies/ticketing-methods";
 
 export default class Passengers {

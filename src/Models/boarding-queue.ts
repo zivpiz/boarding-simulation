@@ -1,7 +1,8 @@
 import * as _ from "lodash";
 import * as R from "ramda";
-import * as seatingMethods from "./seating-methods";
-import { Plane, Person, SeatingMode } from "./types";
+import * as seatingMethods from "../Strategies/seating-methods";
+import { Person, SeatingMode } from "./types";
+import Plane from "./Plane";
 
 // Usage:
 // bq = new BoardingQueue(plane).create(passengers);

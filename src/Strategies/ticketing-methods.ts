@@ -1,6 +1,4 @@
 import {
-  Person,
-  Plane,
   Speed,
   isAisleBlock,
   AisleBlock,
@@ -8,6 +6,8 @@ import {
   SeatStatus
 } from "../Models/types";
 import * as _ from "lodash";
+import Plane from "../Models/plane";
+import Person from "../Models/Person";
 
 //max speed must be grater then 0 --> can cause error
 export function generateRandom(
@@ -47,7 +47,7 @@ export function assignRandomly(
   passengers.forEach(person => {
     let freeSeat = getRandomFreeSeat(aisleBlocks);
     let seatBlock = aisleBlocks.find(block => block.id === freeSeat.row);
-    person.ticket = { row: freeSeat.row, seatInRow: freeSeat.column };
+    person.ticket = { row: freeSeat.row, column: freeSeat.column };
     freeSeat.status = SeatStatus.ASSIGNED;
     seatBlock.assignedSeats++;
     if (seatBlock.assignedSeats === 6) seatBlock.fullyAssigned = true;
