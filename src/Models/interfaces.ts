@@ -29,17 +29,35 @@ export interface IPerson {
 
   getTicket(): Position;
   getPosition(): Position;
+  getDirection(): Direction;
 
-  //Step to the target. Ask frontPerson/ backPerson to change target if needed
-  //called by simulator
-  //return true if at this seat aisle
-  step(): boolean;
   //ask blocker to change his target
-  askToChangeTarget(blocker: IPerson, newTarget: Position): void;
+  //apply and return true if this person dir === backward
+  askToChangeTarget(blocker: IPerson, newTarget: Position): boolean;
   //change this person target to his ticket position
   backToSeat(): void;
   //return true if this person at target
   atTarget(): boolean;
+  //return true if this person at his seat aisle
+  atSeatAisle(): boolean;
+  //return the number of aisleBlocks to move forward
+  //depend on this position, target, frontPerson and ySpeed
+  getForwardYSteps(): number;
+  //return the number of aisleBlocks to move backward
+  //depend on this position, target, backPerson and ySpeed
+  getBackwardYSteps(): number;
+  //return true if direction = backward and backPerson
+  //block this from step steps back
+  isBackBlocked(steps: number, newPosition: Position): boolean;
+  //Step to the row target in the aisle.
+  //Ask backPerson to change target if needed
+  //back to seat if at target
+  //return true if at this seat aisle
+  aisleStep(): boolean;
+  //assume that no one block the way to the seat
+  //step inside this ticket.row if at right row
+  //and target === ticket, else, return false
+  rowStepToSeat(): boolean;
 }
 
 export interface IPlane {
@@ -99,11 +117,11 @@ export interface ISimulator {
   manager: IManager;
   iterations: number;
 
-  //return set of persons that blocking person from sitting
+  //return set of persons that blocking other person from sitting
   seatBlockedBy(person: IPerson): Set<IPerson>;
 
   //ask all group members to set their target
-  //the group new target = seat.y+group.size
+  //the group new target = seat.column+group.size
   //adds all group members to manager.queue for the next iteration
   askToClearSeatWay(group: Set<IPerson>): Array<IPerson>;
 
