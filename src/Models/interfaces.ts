@@ -1,5 +1,3 @@
-import Passengers from "./Passengers";
-import Plane from "./plane";
 import {
   Direction,
   AisleBlock,
@@ -18,7 +16,6 @@ export interface IPerson {
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
-  //   asked: IPerson; //save the person who asked to change target
   direction: Direction; //person movement direction
 
   setFrontPerson(person: IPerson): void;
@@ -68,19 +65,20 @@ export interface IPlane {
   centerColumn: number; // center column index
 
   getAisle(): Array<AisleBlock | EmptyAisleBlock>;
+  getCenter(): number;
   initSeats(): void;
 }
 
 export interface IManager {
   queueMode: SeatingMode;
-  passengers: Passengers;
+  passengers: IPassengers;
   queue: Array<IPerson>;
   sitting: Set<IPerson>;
 
   getQueue(): Array<IPerson>;
   getSitiing(): Set<IPerson>;
 
-  //return set of persons that blocking person from sitting
+  //return set of sitting persons that block person from sitting
   seatBlockedBy(person: IPerson): Set<IPerson>;
 
   //remove passenger from sitting set and
@@ -98,9 +96,10 @@ export interface IManager {
 
 export interface IPassengers {
   passengers: Array<IPerson>;
-  plane: Plane;
+  plane: IPlane;
 
   getPassengers(): Array<IPerson>;
+  initPersons(plane: IPlane, numOfPassengers: number): Array<IPerson>;
 
   //assign tickets to passengers by mode
   //return passengers
@@ -108,12 +107,12 @@ export interface IPassengers {
 
   //create sort queue by mode.
   //set Persons frontPerson and BackPerson by mode
-  boardingBy(plane: IPlane, passengers: IPassengers): Array<IPerson>;
+  boardingBy(mode: SeatingMode): Array<IPerson>;
 }
 
 export interface ISimulator {
-  plane: Plane;
-  passangers: Passengers;
+  plane: IPlane;
+  passangers: IPassengers;
   manager: IManager;
   iterations: number;
 

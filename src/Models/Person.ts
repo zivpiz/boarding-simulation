@@ -1,7 +1,6 @@
 import { Position, Direction, Speed, isEqualPos } from "./types";
+import { generateRandomSpeed } from "../utils";
 import { IPerson } from "./interfaces";
-import * as ticketingMethods from "../Strategies/ticketing-methods";
-import Plane from "./Plane";
 
 export default class Person implements IPerson {
   xSpeed: number; //row speed
@@ -14,13 +13,10 @@ export default class Person implements IPerson {
   backPerson: IPerson; //the person behind this
   direction: Direction; //person movement direction
 
-  constructor(plane: Plane, position: Position) {
-    this.xSpeed = ticketingMethods.generateRandom(
-      Speed.X,
-      plane.spaceBetweenRows
-    );
-    this.ySpeed = ticketingMethods.generateRandom(Speed.Y);
-    this.luggageDelay = ticketingMethods.generateRandom(Speed.LUGGADE);
+  constructor(spaceBetweenRows: number, position: Position) {
+    this.xSpeed = generateRandomSpeed(Speed.X, spaceBetweenRows);
+    this.ySpeed = generateRandomSpeed(Speed.Y);
+    this.luggageDelay = generateRandomSpeed(Speed.LUGGADE);
     this.position = position;
     this.frontPerson = null;
     this.backPerson = null;

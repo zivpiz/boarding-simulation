@@ -1,4 +1,10 @@
-import { AisleBlock, EmptyAisleBlock, Seat, SeatStatus } from "./Models/types";
+import {
+  AisleBlock,
+  EmptyAisleBlock,
+  Seat,
+  SeatStatus,
+  Speed
+} from "./Models/types";
 import Plane from "./Models/Plane";
 
 const createHalfRow = (
@@ -35,4 +41,22 @@ export const createAisleBlockWithRows = (
 
 export const createAisleBlockWithoutRows = (): EmptyAisleBlock => {
   return { hasRows: false, occupied: null };
+};
+
+//max speed must be grater then 0 --> can cause error
+export const generateRandomSpeed = (
+  axis: Speed,
+  maxSpeed = 1,
+  maxLuggade = 3
+): number => {
+  switch (axis) {
+    case Speed.X:
+      return Math.floor(Math.random() * (maxSpeed - 1) + 1);
+    case Speed.Y:
+      return Math.floor(Math.random() * (maxSpeed - 1) + 1);
+    case Speed.LUGGADE:
+      return Math.floor(Math.random() * (maxLuggade - 1) + 1);
+    default:
+      return 1;
+  }
 };
