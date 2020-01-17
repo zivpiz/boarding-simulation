@@ -112,7 +112,7 @@ export interface IPassengers {
 
 export interface ISimulator {
   plane: IPlane;
-  passangers: IPassengers;
+  // passangers: IPassengers;
   manager: IManager;
   iterations: number;
 
@@ -125,8 +125,8 @@ export interface ISimulator {
   askToClearSeatWay(group: Set<IPerson>): Array<IPerson>;
 
   //while not all passengers sitting
-  //foreach manager.queue: person, person.step()
-  //if person.step() === true && seatBlockedBy(person) --> askToChangeTargets
+  //foreach manager.queue: person, person.aisleStep()
+  //if person.aisleStep() === true && seatBlockedBy(person) --> askToChangeTargets
   //iterations++
   //returns iterations
   simulate(): number;
