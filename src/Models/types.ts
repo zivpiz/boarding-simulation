@@ -64,5 +64,7 @@ export enum Speed {
 
 export enum Direction {
   FORWARD = "FORWARD",
-  BACKWARD = "BACKWARD"
+  BACKWARD = "BACKWARD",
+  ENTER = "ENTER",
+  LEAVE = "LEAVE"
 }

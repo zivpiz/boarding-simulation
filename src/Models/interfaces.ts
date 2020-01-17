@@ -4,30 +4,43 @@ import {
   EmptyAisleBlock,
   Position,
   SeatingMode,
-  TicketAssignmetMode
+  TicketAssignmetMode,
+  Speed
 } from "./types";
 
 export interface IPerson {
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage
+  luggageCount: number; //the number of luggage to store
   position: Position; //current position
   target: Position; //next positon to be at
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
   direction: Direction; //person movement direction
+  percentage: number; //the percentage this iteration left
 
   setFrontPerson(person: IPerson): void;
   setBackPerson(person: IPerson): void;
   setTicket(ticket: Position): void;
   setPosition(position: Position): void;
   setTarget(newTarget: Position): void;
+  setPercentage(newPercentage: number): void;
 
   getTicket(): Position;
   getPosition(): Position;
   getDirection(): Direction;
+  getLuggageCount(): number;
+  getSpeed(type: Speed): number;
+  getPercentage(): number;
 
+  initPercentage(): void;
+
+  //put Speed.LUGGAGE in storage if atSeatAisle
+  //return true if this luggage === 0
+  //else return false
+  putLugguge(): boolean;
   //ask blocker to change his target
   //apply and return true if this person dir === backward
   askToChangeTarget(blocker: IPerson, newTarget: Position): boolean;
