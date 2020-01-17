@@ -2,6 +2,8 @@ import * as _ from "lodash";
 import Plane from "./Models/plane";
 import Person from "./Models/Person";
 import Passengers from "./Models/passengers";
+import { ISimulator, IPlane, IManager, IPerson } from './Models/interfaces';
+import {Direction, Position} from './Models/types';
 
 const simulateBoarding = (plane: Plane, queue: Array<Person>): number => {
   let iterations = 0;
@@ -33,7 +35,7 @@ loop until everyone seat:
 
     simulator cases:
       foreach person in manager.queue do:
-        1.  
+        1.
         
     Simulator flow:
       foreach person in manager.queue do:
@@ -47,11 +49,58 @@ loop until everyone seat:
           2. person.aisleStep() === false: do nothing
         2. direction === in/ out: person.rowStepToSeat();
 */
-
 export class Simulator implements ISimulator {
-  plane: Plane;
-  passangers: Passengers;
-  runSimulator(): number {
+  plane: IPlane;
+  manager: IManager;
+  iterations: number;
+
+  constructor(plane, manager) {
+    this.plane = plane;
+    this.manager = manager;
+    this.iterations = 0;
+  }
+
+  simulate(): number {
+    let activeQueue : Array<IPerson> = this.manager.getQueue();
+    let sittingSet : Set<IPerson> = this.manager.getSitiing();
+
+    while (activeQueue.length > 0) {
+      this.iterations++;
+      activeQueue.forEach(person => {
+        person.initPercentage();
+        if (person.getDirection() === Direction.FORWARD) {
+          let arrivedHisRow = person.aisleStep();
+          if (arrivedHisRow) {
+            let blockers: Array<IPerson> = this.manager.getAllBlockersOfPerson(person);
+
+          }
+
+
+        }
+        
+      });
+
+    }
+
+    return this.iterations;
+  }
+
+  //tell the blockers in the row to empty the row.
+  notifyAllSittingBlockersOfPerson(blockers: Array<IPerson>) {
+    let numOfBlockers: number = blockers.length;
+    let rowNumber: number = blockers[0].getPosition().row;
+    blockers.forEach(blocker => {
+      
+
+    })
+    
+  }
+
+  seatBlockedBy(person: IPerson): Set<IPerson> {
     throw new Error("Method not implemented.");
   }
+  askToClearSeatWay(group: Set<IPerson>): IPerson[] {
+    throw new Error("Method not implemented.");
+  }
+
 }
