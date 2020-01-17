@@ -83,6 +83,7 @@ export interface IPlane {
 }
 
 export interface IActivePersonsQueue {
+  length: number;
   constructor(arrayOfPassangers: Array<IPerson>);
   getQueueAsArray(): Array<IPerson>;
   addToQueueBefore(personToAdd: IPerson, before: IPerson);
@@ -93,6 +94,7 @@ export interface IActivePersonsQueue {
 }
 
 export interface IInactivePersonsSet {
+  length: number;
   getAllPersons(): Set<IPerson>;
   //get all persons between the person to his seat (order: the closet blocker to the person is first)
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
