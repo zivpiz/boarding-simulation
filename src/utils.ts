@@ -51,12 +51,19 @@ export const generateRandomSpeed = (
 ): number => {
   switch (axis) {
     case Speed.X:
-      return Math.floor(Math.random() * (maxSpeed - 1) + 1);
+      return generateRandomNatNumber(1, maxSpeed);
     case Speed.Y:
-      return Math.floor(Math.random() * (maxSpeed - 1) + 1);
+      return generateRandomNatNumber(1, maxSpeed);
     case Speed.LUGGADE:
-      return Math.floor(Math.random() * (maxLuggade - 1) + 1);
+      return generateRandomNatNumber(1, maxLuggade);
     default:
       return 1;
   }
+};
+
+export const generateRandomNatNumber = (
+  minNum: number,
+  maxNum: number
+): number => {
+  return Math.floor(Math.random() * (maxNum - minNum) + minNum);
 };
