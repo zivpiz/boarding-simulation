@@ -40,7 +40,7 @@ export interface IPerson {
   //depend on precentage
   //return true if this luggage === 0
   //else return false
-  putLugguge(): boolean;
+  putLuggage(): boolean;
   //ask blocker to change his target
   //apply and return true if this person dir === backward
   askOtherToChangeTarget(blocker: IPerson, newTarget: Position): boolean;
