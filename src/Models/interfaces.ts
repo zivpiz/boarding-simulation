@@ -92,7 +92,7 @@ export interface IManager {
   getSitiing(): Set<IPerson>;
 
   //return set of sitting persons that block person from sitting
-  getAllBlockersOfPerson(person: IPerson): Set<IPerson>;
+  getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
 
   //remove passenger from sitting set and
   //push person to queue after "after" position
