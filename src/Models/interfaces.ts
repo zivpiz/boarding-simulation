@@ -82,29 +82,22 @@ export interface IPlane {
   initSeats(): void;
 }
 
-export interface IManager {
-  queueMode: SeatingMode;
-  passengers: IPassengers;
-  queue: Array<IPerson>;
-  sitting: Set<IPerson>;
+export interface IActivePersonsQueue {
+  constructor(arrayOfPassangers: Array<IPerson>);
+  getQueueAsArray(): Array<IPerson>;
+  addToQueueBefore(personToAdd: IPerson, before: IPerson);
+  addToQueueAfter(personToAdd: IPerson, after: IPerson);
+  push(personToAdd: IPerson);
+  poll(): IPerson;
+  peek(): IPerson;
+}
 
-  getQueue(): Array<IPerson>;
-  getSitiing(): Set<IPerson>;
-
-  //return set of sitting persons that block person from sitting
+export interface IInactivePersonsSet {
+  getAllPersons(): Set<IPerson>;
+  //get all persons between the person to his seat (order: the closet blocker to the person is first)
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
-
-  //remove passenger from sitting set and
-  //push person to queue after "after" position
-  //and set his frontPerson and backPerson
-  //return queue
-  addToQueue(passenger: IPerson, after: number): Array<IPerson>;
-
-  //remove persons set from queue,
-  //set others frontPerson and backPerson
-  //and add person to sitting set
-  //return queue
-  removeFromQueue(passengers: Set<IPerson>): Array<IPerson>;
+  add(person: IPerson);
+  remove(person: IPerson);
 }
 
 export interface IPassengers {
