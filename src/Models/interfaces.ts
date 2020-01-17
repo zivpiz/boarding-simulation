@@ -26,6 +26,8 @@ export interface IPerson {
   setTicket(ticket: Position): void;
   setPosition(position: Position): void;
   setTarget(newTarget: Position): void;
+  //newPercentage > 100 --> set to 100
+  //newPrecentage < 0 --> set to 0
   setPercentage(newPercentage: number): void;
 
   getTicket(): Position;
@@ -38,12 +40,13 @@ export interface IPerson {
   initPercentage(): void;
 
   //put Speed.LUGGAGE in storage if atSeatAisle
+  //depend
   //return true if this luggage === 0
   //else return false
   putLugguge(): boolean;
   //ask blocker to change his target
   //apply and return true if this person dir === backward
-  askToChangeTarget(blocker: IPerson, newTarget: Position): boolean;
+  askOtherToChangeTarget(blocker: IPerson, newTarget: Position): boolean;
   //change this person target to his ticket position
   backToSeat(): void;
   //return true if this person at target
