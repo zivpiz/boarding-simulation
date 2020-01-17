@@ -26,9 +26,6 @@ export interface IPerson {
   setTicket(ticket: Position): void;
   setPosition(position: Position): void;
   setTarget(newTarget: Position): void;
-  //newPercentage > 100 --> set to 100
-  //newPrecentage < 0 --> set to 0
-  setPercentage(newPercentage: number): void;
 
   getTicket(): Position;
   getPosition(): Position;
@@ -38,9 +35,9 @@ export interface IPerson {
   getPercentage(): number;
 
   initPercentage(): void;
-
+  decreasePercentageBy(precentage: number): void:
   //put Speed.LUGGAGE in storage if atSeatAisle
-  //depend
+  //depend on precentage
   //return true if this luggage === 0
   //else return false
   putLugguge(): boolean;

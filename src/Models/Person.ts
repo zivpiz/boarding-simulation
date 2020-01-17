@@ -1,27 +1,31 @@
 import { Position, Direction, Speed, isEqualPos } from "./types";
-import { generateRandomSpeed } from "../utils";
+import { generateRandomSpeed, generateRandomNatNumber } from "../utils";
 import { IPerson } from "./interfaces";
 
 export default class Person implements IPerson {
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage
+  luggageCount: number; //the number of luggage to store
   position: Position; //current position
   target: Position; //next positon to be at
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
   direction: Direction; //person movement direction
+  percentage: number; //the percentage this iteration left
 
   constructor(spaceBetweenRows: number, position: Position) {
     this.xSpeed = generateRandomSpeed(Speed.X, spaceBetweenRows);
     this.ySpeed = generateRandomSpeed(Speed.Y);
     this.luggageDelay = generateRandomSpeed(Speed.LUGGADE);
+    this.luggageCount = generateRandomNatNumber(0, 3);
     this.position = position;
     this.frontPerson = null;
     this.backPerson = null;
     this.direction = Direction.FORWARD;
     this.ticket = null;
+    this.percentage = 0;
   }
 
   getTicket(): Position {
@@ -32,6 +36,24 @@ export default class Person implements IPerson {
   }
   getDirection(): Direction {
     return this.direction;
+  }
+  getLuggageCount(): number {
+    return this.luggageCount;
+  }
+  getSpeed(type: Speed): number {
+    switch (type) {
+      case Speed.X:
+        return this.xSpeed;
+      case Speed.Y:
+        return this.ySpeed;
+      case Speed.LUGGADE:
+        return this.luggageDelay;
+      default:
+        return this.xSpeed;
+    }
+  }
+  getPercentage(): number {
+    return this.percentage;
   }
   setTicket(ticket: Position): void {
     this.ticket = ticket;
@@ -52,13 +74,61 @@ export default class Person implements IPerson {
     this.target = newTarget;
     this.direction = newDir;
   }
+
+  decreasePercentageBy(percentage: number): void {
+    this.percentage -= percentage;
+  }
+
+  initPercentage(): void {
+    this.percentage = 100;
+  }
+
+  private getValuePerPrecentage(percentage: number, value: number): number {
+    return Math.floor((percentage * value) / 100);
+  }
+
+  private getPrecentagePerValue(full: number, used: number): number {
+    return (used * 100) / full;
+  }
+
+  //return the speed used - "value" in precentage of
+  //the speed wich could be used by this person
+  private precentagePerSpeedValue(value: number, type: Speed): number {
+    switch (type) {
+      case Speed.X:
+        return this.getPrecentagePerValue(this.xSpeed, value);
+      case Speed.Y:
+        return this.getPrecentagePerValue(this.ySpeed, value);
+      case Speed.LUGGADE:
+        return this.getPrecentagePerValue(this.luggageDelay, value);
+      default:
+        throw `There is no ${type} Speed type`;
+    }
+  }
+
+  //put Speed.LUGGAGE in storage if atSeatAisle
+  //return true if this luggage === 0
+  //else return false
+  putLugguge(): boolean {
+    if (this.luggageCount === 0) return true;
+    let possible = this.getValuePerPrecentage(
+      this.percentage,
+      this.luggageDelay
+    );
+    let luggageToStore = Math.min(possible, this.luggageCount);
+    this.luggageCount -= luggageToStore;
+    this.decreasePercentageBy(
+      this.precentagePerSpeedValue(luggageToStore, Speed.LUGGADE)
+    );
+    return this.luggageCount === 0;
+  }
   //return true if this person at target
   atTarget(): boolean {
     return isEqualPos(this.position, this.target);
   }
   //ask blocker to change his target
   //apply and return true if this person dir === backward
-  askToChangeTarget(blocker: IPerson, newTarget: Position): boolean {
+  askOtherToChangeTarget(blocker: IPerson, newTarget: Position): boolean {
     let isBackward = this.direction === Direction.BACKWARD;
     if (isBackward) blocker.setTarget(newTarget);
     return isBackward;
