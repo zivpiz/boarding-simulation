@@ -124,7 +124,7 @@ export interface ISimulator {
   plane: IPlane;
   // passangers: IPassengers;
   activePersons: IActivePersonsQueue;
-  inActivePersons: IInactivePersonsSet;
+  inactivePersons: IInactivePersonsSet;
   iterations: number;
 
   //return set of persons that blocking other person from sitting
