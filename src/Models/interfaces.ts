@@ -91,6 +91,7 @@ export interface IActivePersonsQueue {
   push(personToAdd: IPerson);
   poll(): IPerson;
   peek(): IPerson;
+  forEach(lambda);
 }
 
 export interface IInactivePersonsSet {
@@ -100,6 +101,7 @@ export interface IInactivePersonsSet {
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
   add(person: IPerson);
   remove(person: IPerson);
+  forEach(lambda);
 }
 
 export interface IPassengers {
