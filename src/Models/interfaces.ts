@@ -35,7 +35,7 @@ export interface IPerson {
   getPercentage(): number;
 
   initPercentage(): void;
-  decreasePercentageBy(precentage: number): void:
+  decreasePercentageBy(precentage: number): void;
   //put Speed.LUGGAGE in storage if atSeatAisle
   //depend on precentage
   //return true if this luggage === 0
