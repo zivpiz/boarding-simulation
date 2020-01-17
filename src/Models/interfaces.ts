@@ -26,6 +26,7 @@ export interface IPerson {
   setTicket(ticket: Position): void;
   setPosition(position: Position): void;
   setTarget(newTarget: Position): void;
+  setDirection(dir: Direction): void;
 
   getTicket(): Position;
   getPosition(): Position;

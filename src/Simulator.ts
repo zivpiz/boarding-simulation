@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import Plane from "./Models/plane";
 import Person from "./Models/Person";
 import Passengers from "./Models/passengers";
-import { ISimulator, IPlane, IManager, IPerson } from './Models/interfaces';
+import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from './Models/interfaces';
 import {Direction, Position} from './Models/types';
 
 const simulateBoarding = (plane: Plane, queue: Array<Person>): number => {
@@ -51,31 +51,36 @@ loop until everyone seat:
 */
 export class Simulator implements ISimulator {
   plane: IPlane;
-  manager: IManager;
+  activePersons: IActivePersonsQueue;
+  inactivePersons: IInactivePersonsSet;
   iterations: number;
 
-  constructor(plane, manager) {
+  constructor(plane, queue, set) {
     this.plane = plane;
-    this.manager = manager;
+    this.activePersons = queue;
+    this.inactivePersons = set;
     this.iterations = 0;
   }
 
   simulate(): number {
-    let activeQueue : Array<IPerson> = this.manager.getQueue();
-    let sittingSet : Set<IPerson> = this.manager.getSitiing();
 
-    while (activeQueue.length > 0) {
+    while (this.inactivePersons.length > 0) {
       this.iterations++;
-      activeQueue.forEach(person => {
+      this.activePersons.forEach(person => {
         person.initPercentage();
         if (person.getDirection() === Direction.FORWARD) {
           let arrivedHisRow = person.aisleStep();
           if (arrivedHisRow) {
-            let blockers: Array<IPerson> = this.manager.getAllBlockersOfPerson(person);
-
+            if (person.putLuggage()) {
+              let blockers: Array<IPerson> = this.inactivePersons.getAllBlockersOfPerson(person);
+              if (blockers.length > 0) {
+                this.notifyAllSittingBlockersOfPerson(blockers, person);
+              } else {
+                person.setDirection(Direction.ENTER);
+              }
+              
+            }
           }
-
-
         }
         
       });
@@ -85,15 +90,22 @@ export class Simulator implements ISimulator {
     return this.iterations;
   }
 
+  
+
+
+  
+
+
   //tell the blockers in the row to empty the row.
-  notifyAllSittingBlockersOfPerson(blockers: Array<IPerson>) {
+  notifyAllSittingBlockersOfPerson(blockers: Array<IPerson>, person: IPerson) {
     let numOfBlockers: number = blockers.length;
     let rowNumber: number = blockers[0].getPosition().row;
-    blockers.forEach(blocker => {
-      
-
-    })
-    
+    let aisleColumnNum: number = this.plane.getCenter();
+    for (let i=0; i< numOfBlockers; i++) {
+      let blocker: IPerson = blockers[i];
+      blocker.setTarget({column: aisleColumnNum, row: rowNumber+i+1})
+      this.activePersons.addToQueueBefore(blocker, person);
+    }    
   }
 
   seatBlockedBy(person: IPerson): Set<IPerson> {
