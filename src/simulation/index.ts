@@ -1,4 +1,4 @@
-import userBasedInput from './userBasedInput'
+import userInput from './userInput'
 import { SeatingMode } from '../Models/types'
 import { findBestSeatingMode, runSimulation } from './simulationUtils'
 
@@ -11,13 +11,12 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
     numberOfSeatsInHalfRow,
     numberOfPassengers,
     seatingMode
-  } = userBasedInput
+  } = userInput
 
   const simulationResult = runSimulation(numberOfRows, spaceBetweenRows, numberOfSeatsInHalfRow, numberOfPassengers, seatingMode);
   console.log('User based simulation result is:', simulationResult);
   return simulationResult;
 }
-
 
 //Gets parameters from user input and returns an array of best to worst seating modes
 const findBestSeatingModeForUserInput = (): Array<{mode: SeatingMode, result: number}> => {
@@ -26,7 +25,7 @@ const findBestSeatingModeForUserInput = (): Array<{mode: SeatingMode, result: nu
     spaceBetweenRows,
     numberOfSeatsInHalfRow,
     numberOfPassengers,
-  } = userBasedInput;
+  } = userInput;
 
   return findBestSeatingMode(numberOfRows, spaceBetweenRows, numberOfSeatsInHalfRow, numberOfPassengers)
 }

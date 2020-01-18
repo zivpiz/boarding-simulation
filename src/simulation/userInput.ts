@@ -1,4 +1,4 @@
-import { SeatingMode, TicketAssignmetMode } from '../Models/types'
+import { SeatingMode } from '../Models/types'
 
 const numberOfRows = 20;
 const spaceBetweenRows = 3;
