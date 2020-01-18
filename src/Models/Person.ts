@@ -12,6 +12,7 @@ export default class Person implements IPerson {
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
+  blockedPerson: IPerson; //the person who blocked by me in the row
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
 
@@ -23,13 +24,10 @@ export default class Person implements IPerson {
     this.position = position;
     this.frontPerson = null;
     this.backPerson = null;
+    this.blockedPerson = null;
     this.direction = Direction.FORWARD;
     this.ticket = null;
     this.percentage = 0;
-  }
-
-  updateDirectionAccordinToTarget(){
-    //TODO: Implement
   }
 
   getTicket(): Position {
@@ -71,10 +69,18 @@ export default class Person implements IPerson {
   setBackPerson(person: IPerson): void {
     this.backPerson = person;
   }
+  setBlockedPerson(person: IPerson): void {
+    this.blockedPerson = person;
+  }
   setTarget(newTarget: Position): void {
-    let currTarget = this.target;
-    let newDir =
-      currTarget.row > newTarget.row ? Direction.BACKWARD : Direction.FORWARD;
+    let currDir: Direction = this.direction;
+    let currPos: Position = this.position;
+    let newDir: Direction;
+    if (currDir === Direction.FORWARD || currDir === Direction.BACKWARD)
+      newDir =
+        currPos.row > newTarget.row ? Direction.BACKWARD : Direction.FORWARD;
+    else
+      newDir = this.target === this.ticket ? Direction.ENTER : Direction.LEAVE;
     this.target = newTarget;
     this.direction = newDir;
   }
@@ -96,6 +102,16 @@ export default class Person implements IPerson {
 
   private getPrecentagePerValue(full: number, used: number): number {
     return (used * 100) / full;
+  }
+  getFronPerson(): IPerson {
+    return this.frontPerson;
+  }
+  getBackPerson(): IPerson {
+    return this.backPerson;
+  }
+
+  getBlockedPerson(): IPerson {
+    return this.blockedPerson;
   }
 
   //return the speed used - "value" in precentage of
@@ -192,13 +208,8 @@ export default class Person implements IPerson {
   //back to seat if at target
   //return true if at this seat aisle
   aisleStep(): boolean {
-<<<<<<< HEAD
     if (this.atTarget) this.backToSeat;
     let aisleSteps: number =
-=======
-    if (this.atTarget) this.backToSeat();
-    let stepsToRow: number =
->>>>>>> 18346e219848ce07c44eb03983cc73d3f27482cb
       this.direction === Direction.FORWARD
         ? this.getForwardYSteps()
         : this.getBackwardYSteps();
@@ -221,17 +232,50 @@ export default class Person implements IPerson {
     return this.position.row === this.ticket.row;
   }
 
-  //assume that no one blocks the way to the seat
-  //step inside this ticket.row if at right row
-  //and target === ticket, else, return false
-  rowStepToSeat(): boolean {
-    if (isEqualPos(this.target, this.ticket) && this.atSeatAisle()) {
-      this.setPosition(this.ticket);
-      return true;
-    } else return false;
+  //Step to the column target in the row.
+  //Ask blocked to change target if needed
+  //return true if at this seat column
+  rowStep(): boolean {
+    // let rowSteps: number =
+    //   this.direction === Direction.FORWARD
+    //     ? this.getForwardYSteps()
+    //     : this.getBackwardYSteps();
+    // let newPosition: Position = this.newRowPositionByDir(
+    //   aisleSteps,
+    //   this.direction
+    // );
+    // let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
+    // if (backBlock)
+    //   this.askOtherToChangeTarget(
+    //     this.backPerson,
+    //     this.newRowPositionByDir(1, Direction.BACKWARD)
+    //   );
+    // this.decreasePercentageBy(
+    //   this.precentagePerSpeedValue(aisleSteps, Speed.Y)
+    // );
+    // this.position = newPosition;
+    // if (this.atTarget()) this.backToSeat;
+
+    return this.position.column === this.ticket.column;
   }
 
   hasMoreLuggage(): boolean {
     return this.luggageCount !== 0;
+  }
+  //this.position === this.ticket aisle center
+  updateDirectionAccordinToTarget(): Direction {
+    let newDir: Direction;
+    let centerPos: Position = this.position;
+    let target: Position = this.target;
+    if (centerPos.row < target.row && centerPos.column === target.column) {
+      newDir = Direction.FORWARD;
+      this.setBlockedPerson(null);
+    } else if (centerPos.row > target.row && centerPos.column === target.column)
+      newDir = Direction.BACKWARD;
+    else if (centerPos.row === target.row && centerPos.column !== target.column)
+      newDir = Direction.ENTER;
+    else throw "This Person is not in the middle of his seat ticket aisle";
+    this.direction = newDir;
+    return newDir;
   }
 }

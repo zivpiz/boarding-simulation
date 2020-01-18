@@ -18,6 +18,7 @@ export interface IPerson {
   ticket: Position | null;
   frontPerson: IPerson; //the person in front of this
   backPerson: IPerson; //the person behind this
+  blockedPerson: IPerson; //the person who blocked by me in the row
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
 
@@ -26,7 +27,8 @@ export interface IPerson {
   setTicket(ticket: Position): void;
   setPosition(position: Position): void;
   setTarget(newTarget: Position): void;
-  // setDirection(dir: Direction): void;
+  setDirection(dir: Direction): void;
+  setBlockedPerson(person: IPerson): void;
 
   getTicket(): Position;
   getPosition(): Position;
@@ -34,6 +36,9 @@ export interface IPerson {
   getLuggageCount(): number;
   getSpeed(type: Speed): number;
   getPercentage(): number;
+  getFronPerson(): IPerson;
+  getBackPerson(): IPerson;
+  getBlockedPerson(): IPerson;
 
   hasMoreLuggage(): boolean;
 
@@ -70,7 +75,7 @@ export interface IPerson {
   //assume that no one block the way to the seat
   //step inside this ticket.row if at right row
   //and target === ticket, else, return false
-  rowStepToSeat(): boolean;
+  rowStep(): boolean;
   updateDirectionAccordinToTarget(): Direction;
 }
 
