@@ -4,6 +4,7 @@ import Person from "./Models/Person";
 import Passengers from "./Models/passengers";
 import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from './Models/interfaces';
 import {Direction, Position} from './Models/types';
+import { InactivePersonsSet } from "./Models/InactivePersonsSet";
 
 /*
 loop until everyone seat:
@@ -44,10 +45,10 @@ export class Simulator implements ISimulator {
   private inactivePersons: IInactivePersonsSet;
   private iterations: number;
 
-  constructor(plane: IPlane, queue: IActivePersonsQueue, set: IInactivePersonsSet) {
+  constructor(plane: IPlane, queue: IActivePersonsQueue) {
     this.plane = plane;
     this.activePersons = queue;
-    this.inactivePersons = set;
+    this.inactivePersons = new InactivePersonsSet();
     this.iterations = 0;
   }
 
