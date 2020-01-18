@@ -102,7 +102,7 @@ export interface IInactivePersonsSet {
   isPersonBlocked(person: IPerson): boolean;
   add(person: IPerson);
   remove(person: IPerson);
-  forEach(lambda);
+  forEach(lambda: (element: IPerson) => void);
 }
 
 export interface IPassengers {
