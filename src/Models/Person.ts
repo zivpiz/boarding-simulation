@@ -196,12 +196,12 @@ export default class Person implements IPerson {
     );
     let backBlock: boolean = this.isBackBlocked(stepsToRow, newPosition);
     if (backBlock)
-      this.askToChangeTarget(
+      this.askOtherToChangeTarget(
         this.backPerson,
         this.newRowPositionByDir(1, Direction.BACKWARD)
       );
     this.position = newPosition;
-    if (this.atTarget()) this.backToSeat;
+    if (this.atTarget()) this.backToSeat();
 
     return this.position.row === this.ticket.row;
   }
