@@ -74,6 +74,9 @@ export default class Person implements IPerson {
     this.target = newTarget;
     this.direction = newDir;
   }
+  setDirection(dir: Direction): void {
+    this.direction = dir;
+  }
 
   decreasePercentageBy(percentage: number): void {
     this.percentage -= percentage;
@@ -142,24 +145,28 @@ export default class Person implements IPerson {
     return this.position.row === this.ticket.row;
   }
   //return the number of aisleBlocks to move forward
-  //depend on this position, target, frontPerson and ySpeed
+  //depend on this position, target, frontPerson, ySpeed
+  //and precentage
   getForwardYSteps(): number {
     let farAsPossible = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
         ? this.frontPerson.position.row - 1
         : this.target.row
       : this.target.row;
-    return Math.min(farAsPossible, this.ySpeed);
+    farAsPossible = Math.min(farAsPossible, this.ySpeed);
+    return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   //return the number of aisleBlocks to move backward
   //depend on this position, target, backPerson and ySpeed
+  //and precentage
   getBackwardYSteps(): number {
     let farAsPossible = this.backPerson
       ? this.target.row <= this.backPerson.position.row
         ? this.backPerson.position.row - 1
         : this.target.row
       : this.target.row;
-    return Math.min(farAsPossible, this.ySpeed);
+    farAsPossible = Math.min(farAsPossible, this.ySpeed);
+    return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   //return true if direction = backward and backPerson
   //block this from step steps back in current iteration
@@ -182,20 +189,23 @@ export default class Person implements IPerson {
   //return true if at this seat aisle
   aisleStep(): boolean {
     if (this.atTarget) this.backToSeat;
-    let stepsToRow: number =
+    let aisleSteps: number =
       this.direction === Direction.FORWARD
         ? this.getForwardYSteps()
         : this.getBackwardYSteps();
     let newPosition: Position = this.newRowPositionByDir(
-      stepsToRow,
+      aisleSteps,
       this.direction
     );
-    let backBlock: boolean = this.isBackBlocked(stepsToRow, newPosition);
+    let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
     if (backBlock)
-      this.askToChangeTarget(
+      this.askOtherToChangeTarget(
         this.backPerson,
         this.newRowPositionByDir(1, Direction.BACKWARD)
       );
+    this.decreasePercentageBy(
+      this.precentagePerSpeedValue(aisleSteps, Speed.Y)
+    );
     this.position = newPosition;
     if (this.atTarget()) this.backToSeat;
 
