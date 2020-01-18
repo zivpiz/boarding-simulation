@@ -36,7 +36,7 @@ export interface IPerson {
   getLuggageCount(): number;
   getSpeed(type: Speed): number;
   getPercentage(): number;
-  getFronPerson(): IPerson;
+  getFrontPerson(): IPerson;
   getBackPerson(): IPerson;
   getBlockedPerson(): IPerson;
 
