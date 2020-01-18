@@ -227,7 +227,7 @@ export default class Person implements IPerson {
       this.precentagePerSpeedValue(aisleSteps, Speed.Y)
     );
     this.position = newPosition;
-    if (this.atTarget()) this.backToSeat;
+    if (this.atTarget()) this.backToSeat();
 
     return this.position.row === this.ticket.row;
   }

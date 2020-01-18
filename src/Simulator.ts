@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import Plane from "./Models/plane";
 import Person from "./Models/Person";
 import Passengers from "./Models/passengers";
