@@ -88,10 +88,8 @@ export interface IPlane {
 
 export interface IActivePersonsQueue {
   length: number;
-  constructor(arrayOfPassangers: Array<IPerson>);
   getQueueAsArray(): Array<IPerson>;
   addToQueueBefore(personToAdd: IPerson, before: IPerson);
-  addToQueueAfter(personToAdd: IPerson, after: IPerson);
   remove(personToRemove: IPerson);
   forEach(lambda);
 }
