@@ -28,6 +28,10 @@ export default class Person implements IPerson {
     this.percentage = 0;
   }
 
+  updateDirectionAccordinToTarget(){
+    //TODO: Implement
+  }
+
   getTicket(): Position {
     return this.ticket;
   }
@@ -112,7 +116,7 @@ export default class Person implements IPerson {
   //put Speed.LUGGAGE in storage if atSeatAisle
   //return true if this luggage === 0
   //else return false
-  putLugguge(): boolean {
+  putLuggage(): boolean {
     if (this.luggageCount === 0) return true;
     let possible = this.getValuePerPrecentage(
       this.percentage,
@@ -188,8 +192,13 @@ export default class Person implements IPerson {
   //back to seat if at target
   //return true if at this seat aisle
   aisleStep(): boolean {
+<<<<<<< HEAD
     if (this.atTarget) this.backToSeat;
     let aisleSteps: number =
+=======
+    if (this.atTarget) this.backToSeat();
+    let stepsToRow: number =
+>>>>>>> 18346e219848ce07c44eb03983cc73d3f27482cb
       this.direction === Direction.FORWARD
         ? this.getForwardYSteps()
         : this.getBackwardYSteps();
@@ -220,5 +229,9 @@ export default class Person implements IPerson {
       this.setPosition(this.ticket);
       return true;
     } else return false;
+  }
+
+  hasMoreLuggage(): boolean {
+    return this.luggageCount !== 0;
   }
 }
