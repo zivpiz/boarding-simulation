@@ -17,8 +17,8 @@ export default class Person implements IPerson {
   percentage: number; //the percentage this iteration left
 
   constructor(spaceBetweenRows: number, position: Position) {
-    this.xSpeed = generateRandomSpeed(Speed.X, spaceBetweenRows);
-    this.ySpeed = generateRandomSpeed(Speed.Y);
+    this.xSpeed = 1;
+    this.ySpeed = generateRandomSpeed(Speed.Y, spaceBetweenRows);
     this.luggageDelay = generateRandomSpeed(Speed.LUGGADE);
     this.luggageCount = generateRandomNatNumber(0, 3);
     this.position = position;
@@ -103,7 +103,7 @@ export default class Person implements IPerson {
   private getPrecentagePerValue(full: number, used: number): number {
     return (used * 100) / full;
   }
-  getFronPerson(): IPerson {
+  getFrontPerson(): IPerson {
     return this.frontPerson;
   }
   getBackPerson(): IPerson {
@@ -170,7 +170,9 @@ export default class Person implements IPerson {
   private getForwardYSteps(): number {
     let farAsPossible = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
-        ? this.frontPerson.position.row - 1
+        ? this.frontPerson.atSeatAisle()
+          ? this.frontPerson.position.row - 2
+          : this.frontPerson.position.row - 1
         : this.target.row
       : this.target.row;
     farAsPossible = Math.min(farAsPossible, this.ySpeed);
@@ -189,22 +191,22 @@ export default class Person implements IPerson {
     return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   private getEnterXSteps(): number {
-    let farAsPossible = this.backPerson
-      ? this.target.row <= this.backPerson.position.row
-        ? this.backPerson.position.row - 1
-        : this.target.row
-      : this.target.row;
-    farAsPossible = Math.min(farAsPossible, this.ySpeed);
-    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+    return this.getValuePerPrecentage(this.percentage, 1);
   }
+
   private getLeaveXSteps(): number {
-    let farAsPossible = this.backPerson
-      ? this.target.row <= this.backPerson.position.row
-        ? this.backPerson.position.row - 1
-        : this.target.row
-      : this.target.row;
-    farAsPossible = Math.min(farAsPossible, this.ySpeed);
-    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+    const isOneStep = (first: Position, second: Position): boolean => {
+      return Math.abs(first.column - second.column) === 1;
+    };
+    let blocker = isOneStep(this.blockedPerson.position, this.position)
+      ? this.blockedPerson
+      : this.frontPerson;
+    let step = blocker
+      ? Math.abs(this.position.column - blocker.position.column) > 1
+        ? 1
+        : 0
+      : 1;
+    return this.getValuePerPrecentage(this.percentage, step);
   }
   //return true if direction = backward and backPerson
   //block this from step steps back in current iteration
@@ -216,10 +218,21 @@ export default class Person implements IPerson {
     );
   }
 
-  private newRowPositionByDir(steps: number, dir: Direction): Position {
-    return dir === Direction.FORWARD
-      ? { row: this.position.row + steps, column: this.position.column }
-      : { row: this.position.row - steps, column: this.position.column };
+  private newPositionByDir(steps: number, dir: Direction): Position {
+    let newColumnPos =
+      this.target.column < this.position.column
+        ? this.position.column - steps
+        : this.position.column + steps;
+    switch (dir) {
+      case Direction.FORWARD:
+        return { row: this.position.row + steps, column: this.position.column };
+      case Direction.BACKWARD:
+        return { row: this.position.row - steps, column: this.position.column };
+      case Direction.ENTER:
+        return { row: this.position.row, column: newColumnPos };
+      case Direction.LEAVE:
+        return { row: this.position.row, column: newColumnPos };
+    }
   }
   //Step to the row target in the aisle.
   //Ask backPerson to change target if needed
@@ -231,7 +244,7 @@ export default class Person implements IPerson {
       this.direction === Direction.FORWARD
         ? this.getForwardYSteps()
         : this.getBackwardYSteps();
-    let newPosition: Position = this.newRowPositionByDir(
+    let newPosition: Position = this.newPositionByDir(
       aisleSteps,
       this.direction
     );
@@ -239,7 +252,7 @@ export default class Person implements IPerson {
     if (backBlock)
       this.askOtherToChangeTarget(
         this.backPerson,
-        this.newRowPositionByDir(1, Direction.BACKWARD)
+        this.newPositionByDir(1, Direction.BACKWARD)
       );
     this.decreasePercentageBy(
       this.precentagePerSpeedValue(aisleSteps, Speed.Y)
@@ -251,29 +264,15 @@ export default class Person implements IPerson {
   }
 
   //Step to the column target in the row.
-  //Ask blocked to change target if needed
   //return true if at this seat column
   rowStep(): boolean {
     let rowSteps: number =
       this.direction === Direction.ENTER
         ? this.getEnterXSteps()
         : this.getLeaveXSteps();
-    let newPosition: Position = this.newRowPositionByDir(
-      aisleSteps,
-      this.direction
-    );
-    let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
-    if (backBlock)
-      this.askOtherToChangeTarget(
-        this.backPerson,
-        this.newRowPositionByDir(1, Direction.BACKWARD)
-      );
-    this.decreasePercentageBy(
-      this.precentagePerSpeedValue(aisleSteps, Speed.Y)
-    );
+    let newPosition: Position = this.newPositionByDir(rowSteps, this.direction);
+    this.decreasePercentageBy(this.precentagePerSpeedValue(rowSteps, Speed.X));
     this.position = newPosition;
-    if (this.atTarget()) this.backToSeat;
-
     return this.position.column === this.ticket.column;
   }
 
