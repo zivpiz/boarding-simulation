@@ -36,6 +36,7 @@ export interface IPerson {
   getPercentage(): number;
 
   hasMoreLuggage(): boolean;
+  isInHisRow(): boolean;
 
   initPercentage(): void;
   decreasePercentageBy(precentage: number): void;
