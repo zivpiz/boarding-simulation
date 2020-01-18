@@ -15,6 +15,7 @@ export default class Passengers implements IPassengers {
     if (numOfPassengers > numOfPlaneSeats) numOfPassengers = numOfPlaneSeats;
     this.plane.initSeats();
     this.passengers = this.initPersons(plane, numOfPassengers);
+    this.assignTicketsBy(TicketAssignmetMode.RANDOM)
   }
 
   getPassengers() {

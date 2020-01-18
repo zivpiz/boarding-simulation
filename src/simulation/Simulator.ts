@@ -1,9 +1,9 @@
-import Plane from "./Models/plane";
-import Person from "./Models/Person";
-import Passengers from "./Models/passengers";
-import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from './Models/interfaces';
-import {Direction, Position} from './Models/types';
-import { InactivePersonsSet } from "./Models/InactivePersonsSet";
+import Plane from "../Models/plane";
+import Person from "../Models/Person";
+import Passengers from "../Models/passengers";
+import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from '../Models/interfaces';
+import {Direction, Position} from '../Models/types';
+import { InactivePersonsSet } from "../Models/InactivePersonsSet";
 
 /*
 loop until everyone seat:
