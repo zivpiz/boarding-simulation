@@ -124,20 +124,9 @@ export interface IPassengers {
 }
 
 export interface ISimulator {
-  plane: IPlane;
+  getPlane(): IPlane;
   // passangers: IPassengers;
-  activePersons: IActivePersonsQueue;
-  inactivePersons: IInactivePersonsSet;
-  iterations: number;
-
-  //return set of persons that blocking other person from sitting
-  seatBlockedBy(person: IPerson): Set<IPerson>;
-
-  //ask all group members to set their target
-  //the group new target = seat.column+group.size
-  //adds all group members to manager.queue for the next iteration
-  askToClearSeatWay(group: Set<IPerson>): Array<IPerson>;
-
+  getIterations(): number;
   //while not all passengers sitting
   //foreach manager.queue: person, person.aisleStep()
   //if person.aisleStep() === true && seatBlockedBy(person) --> askToChangeTargets
