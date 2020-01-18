@@ -14,12 +14,16 @@ export class ActivePersonsQueue implements IActivePersonsQueue {
     }
 
     addToQueueBefore(personToAdd: IPerson, before: IPerson) {
+        personToAdd.setBackPerson(before);
         let index = this.getPersonIndex(personToAdd);
+        personToAdd.setFrontPerson(this.passangers[index+1]);
         this.passangers.splice(index, 0, personToAdd);       
         this.length++;         
     }
 
     remove(personToRemove: IPerson) {
+        personToRemove.getBackPerson().setFrontPerson(personToRemove.getFrontPerson());
+        personToRemove.getFrontPerson().setBackPerson(personToRemove.getBackPerson());
         let index = this.getPersonIndex(personToRemove);
         this.passangers.splice(index, 1);
         this.length--;

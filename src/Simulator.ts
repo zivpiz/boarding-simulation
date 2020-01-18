@@ -88,7 +88,7 @@ export class Simulator implements ISimulator {
       if (person.getDirection() === Direction.FORWARD) { //person in his way out (trying to empty the row)
         this.walkInAilse(person);
       } else { //person in his way in
-        this.walkInRow(person);
+        this.personGetsIntoHisRow(person);
       }
     }
   }
@@ -101,7 +101,7 @@ export class Simulator implements ISimulator {
   } 
 
   private walkInRow(person: IPerson) {
-    let arrivedHisSeat = person.rowStepToSeat();
+    let arrivedHisSeat = person.rowStep();
     if (arrivedHisSeat) {
       this.activePersons.remove(person);
       this.inactivePersons.add(person);
@@ -109,6 +109,12 @@ export class Simulator implements ISimulator {
     else if (this.isPersonInAisle(person)) {
       this.handlePersonInHisRowButInAisle(person);
     }
+  }
+
+  private personGetsIntoHisRow(person: IPerson) {
+    person.getBackPerson().setFrontPerson(person.getFrontPerson());
+    person.getFrontPerson().setBackPerson(person.getBackPerson());
+    this.walkInRow(person);
   }
 
   private tellPersonToWalkOneStepBack(person: IPerson) {
@@ -144,7 +150,8 @@ export class Simulator implements ISimulator {
     let aisleColumnNum: number = this.plane.getCenter();
     for (let i=0; i< numOfBlockers; i++) {
       let blocker: IPerson = blockers[i];
-      blocker.setTarget({column: aisleColumnNum, row: rowNumber+i+1})
+      blocker.setTarget({column: aisleColumnNum, row: rowNumber+i+1});
+      blocker.setBlockedPerson(person);
       this.activePersons.addToQueueBefore(blocker, person);
     }    
   }
