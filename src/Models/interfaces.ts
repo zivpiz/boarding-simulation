@@ -98,6 +98,7 @@ export interface IInactivePersonsSet {
   getAllPersons(): Set<IPerson>;
   //get all persons between the person to his seat (order: the closet blocker to the person is first)
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
+  isPersonBlocked(person: IPerson): boolean;
   add(person: IPerson);
   remove(person: IPerson);
   forEach(lambda);
