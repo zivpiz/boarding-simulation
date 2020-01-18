@@ -36,7 +36,6 @@ export interface IPerson {
   getPercentage(): number;
 
   hasMoreLuggage(): boolean;
-  isInHisRow(): boolean;
 
   initPercentage(): void;
   decreasePercentageBy(precentage: number): void;
@@ -72,6 +71,7 @@ export interface IPerson {
   //step inside this ticket.row if at right row
   //and target === ticket, else, return false
   rowStepToSeat(): boolean;
+  updateDirectionAccordinToTarget(): Direction;
 }
 
 export interface IPlane {
