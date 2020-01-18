@@ -91,7 +91,7 @@ export interface IActivePersonsQueue {
   getQueueAsArray(): Array<IPerson>;
   addToQueueBefore(personToAdd: IPerson, before: IPerson);
   remove(personToRemove: IPerson);
-  forEach(lambda);
+  forEach(lambda: (element: IPerson) => void);
 }
 
 export interface IInactivePersonsSet {
