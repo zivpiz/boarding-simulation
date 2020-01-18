@@ -89,9 +89,7 @@ export interface IActivePersonsQueue {
   getQueueAsArray(): Array<IPerson>;
   addToQueueBefore(personToAdd: IPerson, before: IPerson);
   addToQueueAfter(personToAdd: IPerson, after: IPerson);
-  push(personToAdd: IPerson);
-  poll(): IPerson;
-  peek(): IPerson;
+  remove(personToRemove: IPerson);
   forEach(lambda);
 }
 
