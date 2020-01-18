@@ -116,13 +116,13 @@ export class Simulator implements ISimulator {
     person.setTarget({row: person.getPosition().row-1, column: person.getPosition().column});
   }
 
-  private changeDirectionToEnterRow(person: IPerson): void {
-    person.setDirection(Direction.ENTER);
-  }
-
-  private changeDirectionToForward(person: IPerson): void {
-    person.setDirection(Direction.FORWARD);
-  }
+  // private changeDirectionToEnterRow(person: IPerson): void {
+  //   person.setDirection(Direction.ENTER);
+  // }
+  //
+  // private changeDirectionToForward(person: IPerson): void {
+  //   person.setDirection(Direction.FORWARD);
+  // }
 
   private isPersonBlockedInRow(person: IPerson): boolean {
     return this.inactivePersons.isPersonBlocked(person);
