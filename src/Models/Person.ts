@@ -167,7 +167,7 @@ export default class Person implements IPerson {
   //return the number of aisleBlocks to move forward
   //depend on this position, target, frontPerson, ySpeed
   //and precentage
-  getForwardYSteps(): number {
+  private getForwardYSteps(): number {
     let farAsPossible = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
         ? this.frontPerson.position.row - 1
@@ -179,7 +179,25 @@ export default class Person implements IPerson {
   //return the number of aisleBlocks to move backward
   //depend on this position, target, backPerson and ySpeed
   //and precentage
-  getBackwardYSteps(): number {
+  private getBackwardYSteps(): number {
+    let farAsPossible = this.backPerson
+      ? this.target.row <= this.backPerson.position.row
+        ? this.backPerson.position.row - 1
+        : this.target.row
+      : this.target.row;
+    farAsPossible = Math.min(farAsPossible, this.ySpeed);
+    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+  }
+  private getEnterXSteps(): number {
+    let farAsPossible = this.backPerson
+      ? this.target.row <= this.backPerson.position.row
+        ? this.backPerson.position.row - 1
+        : this.target.row
+      : this.target.row;
+    farAsPossible = Math.min(farAsPossible, this.ySpeed);
+    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+  }
+  private getLeaveXSteps(): number {
     let farAsPossible = this.backPerson
       ? this.target.row <= this.backPerson.position.row
         ? this.backPerson.position.row - 1
@@ -236,25 +254,25 @@ export default class Person implements IPerson {
   //Ask blocked to change target if needed
   //return true if at this seat column
   rowStep(): boolean {
-    // let rowSteps: number =
-    //   this.direction === Direction.FORWARD
-    //     ? this.getForwardYSteps()
-    //     : this.getBackwardYSteps();
-    // let newPosition: Position = this.newRowPositionByDir(
-    //   aisleSteps,
-    //   this.direction
-    // );
-    // let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
-    // if (backBlock)
-    //   this.askOtherToChangeTarget(
-    //     this.backPerson,
-    //     this.newRowPositionByDir(1, Direction.BACKWARD)
-    //   );
-    // this.decreasePercentageBy(
-    //   this.precentagePerSpeedValue(aisleSteps, Speed.Y)
-    // );
-    // this.position = newPosition;
-    // if (this.atTarget()) this.backToSeat;
+    let rowSteps: number =
+      this.direction === Direction.ENTER
+        ? this.getEnterXSteps()
+        : this.getLeaveXSteps();
+    let newPosition: Position = this.newRowPositionByDir(
+      aisleSteps,
+      this.direction
+    );
+    let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
+    if (backBlock)
+      this.askOtherToChangeTarget(
+        this.backPerson,
+        this.newRowPositionByDir(1, Direction.BACKWARD)
+      );
+    this.decreasePercentageBy(
+      this.precentagePerSpeedValue(aisleSteps, Speed.Y)
+    );
+    this.position = newPosition;
+    if (this.atTarget()) this.backToSeat;
 
     return this.position.column === this.ticket.column;
   }

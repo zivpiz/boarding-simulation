@@ -58,12 +58,6 @@ export interface IPerson {
   atTarget(): boolean;
   //return true if this person at his seat aisle
   atSeatAisle(): boolean;
-  //return the number of aisleBlocks to move forward
-  //depend on this position, target, frontPerson and ySpeed
-  getForwardYSteps(): number;
-  //return the number of aisleBlocks to move backward
-  //depend on this position, target, backPerson and ySpeed
-  getBackwardYSteps(): number;
   //return true if direction = backward and backPerson
   //block this from step steps back
   isBackBlocked(steps: number, newPosition: Position): boolean;
