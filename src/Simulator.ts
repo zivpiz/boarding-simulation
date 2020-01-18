@@ -4,9 +4,6 @@ import Person from "./Models/Person";
 import Passengers from "./Models/passengers";
 import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from './Models/interfaces';
 import {Direction, Position} from './Models/types';
-import { IPlane } from "./Models/interfaces";
-import { IActivePersonsQueue } from "./Models/interfaces";
-import { IInactivePersonsSet } from "./Models/interfaces";
 
 /*
 loop until everyone seat:
