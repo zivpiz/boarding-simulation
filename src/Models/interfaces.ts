@@ -35,6 +35,8 @@ export interface IPerson {
   getSpeed(type: Speed): number;
   getPercentage(): number;
 
+  hasMoreLuggage(): boolean;
+
   initPercentage(): void;
   decreasePercentageBy(precentage: number): void;
   //put Speed.LUGGAGE in storage if atSeatAisle
