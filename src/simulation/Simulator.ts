@@ -79,6 +79,7 @@ export class Simulator implements ISimulator {
     return this.iterations;
   }
 
+  //this function handle the case of person in the aisle and in his ticket row number
   private handlePersonInHisRowButInAisle(person) {
     let isPersonBlocked = this.isPersonBlockedInRow(person);
     if (isPersonBlocked) {
@@ -90,7 +91,12 @@ export class Simulator implements ISimulator {
     if (isPersonBlocked && !person.hasMoreLuggage()) {
       this.tellPersonToWalkOneStepBack(person);
     }
-    if (!isPersonBlocked && !person.hasMoreLuggage()) {
+    if (!isPersonBlocked && !person.hasMoreLuggage()) { 
+      //person finished with his luggage and no one blocks him.
+      //person can be here in 3 cases: 
+      //1. person start walk into his seat from the aisle.
+      //2. person empty the row for someone
+      //3. person returns to his seat after he empty the row for someone
       person.updateDirectionAccordinToTarget();
       if (person.getDirection() === Direction.FORWARD) {
         //person in his way out (trying to empty the row)
