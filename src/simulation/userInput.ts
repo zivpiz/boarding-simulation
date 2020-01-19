@@ -1,12 +1,12 @@
-import { SeatingMode } from '../Models/types'
+import { SeatingMode } from "../Models/types";
 
 const numberOfRows = 20;
 const spaceBetweenRows = 3;
 const numberOfSeatsInHalfRow = 3;
 
 // If number of passengers is larger than the capacity of the plane - the plane fills up
-const numberOfPassengers = Infinity
-const seatingMode: SeatingMode = SeatingMode.RANDOM
+const numberOfPassengers = 1;
+const seatingMode: SeatingMode = SeatingMode.RANDOM;
 
 export default {
   numberOfRows,
@@ -14,4 +14,4 @@ export default {
   numberOfSeatsInHalfRow,
   numberOfPassengers,
   seatingMode
-}
+};

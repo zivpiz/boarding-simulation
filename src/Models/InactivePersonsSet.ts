@@ -36,6 +36,7 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     isPersonBlocked(person: IPerson): boolean {
         const {row, column} = person.getPosition();
         const ticketColumn = person.getTicket().column;
+        console.log(person.toString());
         return Array.from(this.passangers).some((sittingPerson: IPerson) => {
             let sittingRow = sittingPerson.getPosition().row;
             let sittingColumn = sittingPerson.getPosition().column;
