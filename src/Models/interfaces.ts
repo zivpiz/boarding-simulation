@@ -82,6 +82,7 @@ export interface IPlane {
   spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
   centerColumn: number; // center column index
+  numberOfSeats: number;
 
   getAisle(): Array<AisleBlock | EmptyAisleBlock>;
   getCenter(): number;
