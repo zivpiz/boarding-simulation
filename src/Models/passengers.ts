@@ -26,10 +26,14 @@ export default class Passengers implements IPassengers {
   initPersons(plane: Plane, numOfPassengers: number): Array<Person> {
     let persons = new Array<Person>(numOfPassengers);
     for (let i = 0; i < numOfPassengers; i++) {
-      persons[i] = new Person(plane.spaceBetweenRows, {
-        row: -1 * i,
-        column: plane.getCenter()
-      });
+      persons[i] = new Person(
+        plane.spaceBetweenRows,
+        {
+          row: -1 * i,
+          column: plane.getCenter()
+        },
+        i
+      );
     }
     return persons;
   }

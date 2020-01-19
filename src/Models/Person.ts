@@ -3,6 +3,7 @@ import { generateRandomSpeed, generateRandomNatNumber } from "../utils";
 import { IPerson } from "./interfaces";
 
 export default class Person implements IPerson {
+  id: number;
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage
@@ -16,7 +17,8 @@ export default class Person implements IPerson {
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
 
-  constructor(spaceBetweenRows: number, position: Position) {
+  constructor(spaceBetweenRows: number, position: Position, id: number) {
+    this.id = id;
     this.xSpeed = 1;
     this.ySpeed = generateRandomSpeed(Speed.Y, spaceBetweenRows);
     this.luggageDelay = generateRandomSpeed(Speed.LUGGADE);
