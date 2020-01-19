@@ -23,7 +23,7 @@ class Plane implements IPlane {
     this.rows = seatsRows + (seatsRows - 1) * spaceBetweenRows;
     this.columns = seatsInHalfRow * 2 + 1;
     this.spaceBetweenRows = spaceBetweenRows;
-    this.centerColumn = seatsInHalfRow + 1;
+    this.centerColumn = seatsInHalfRow;
     this.aisle = new Array<AisleBlock | EmptyAisleBlock>(this.rows);
 
     for (let i = 0; i < this.rows; i++) {
