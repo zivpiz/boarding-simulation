@@ -302,18 +302,17 @@ export default class Person implements IPerson {
   }
 
   toString(): string {
-    return (
-    `id: ${this.id}, 
+    return `id: ${this.id}, 
     xSpeed: ${this.xSpeed},
     ySpeed: ${this.ySpeed},
     luggageDelay: ${this.luggageDelay},
     luggageCount: ${this.luggageCount},
     position: ${this.position},
-    frontPerson: ${this.frontPerson.id},
-    backPerson: ${this.backPerson.id},
-    blockedPerson: ${this.blockedPerson.id},
+    frontPerson: ${this.frontPerson ? this.frontPerson.id : null},
+    backPerson: ${this.backPerson ? this.backPerson.id : null},
+    blockedPerson: ${this.blockedPerson ? this.blockedPerson.id : null},
     direction: ${this.direction},
     ticket: ${this.ticket},
-    percentage: ${this.percentage}`);
+    percentage: ${this.percentage}`;
   }
 }
