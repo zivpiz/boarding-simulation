@@ -293,7 +293,10 @@ export default class Person implements IPerson {
       newDir = Direction.BACKWARD;
     else if (centerPos.row === target.row && centerPos.column !== target.column)
       newDir = Direction.ENTER;
-    else throw "This Person is not in the middle of his seat ticket aisle";
+    else {
+      console.log("PERSON", this);
+      throw "This Person is not in the middle of his seat ticket aisle";
+    }
     this.direction = newDir;
     return newDir;
   }
