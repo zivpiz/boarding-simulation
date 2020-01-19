@@ -13,15 +13,16 @@ const createHalfRow = (
   side: string
 ): Array<Seat> => {
   let seats = new Array<Seat>(numOfSeats);
-  return seats.map((seat: Seat, index: number) => {
-    return side === "left"
+  for (let index = 0; index < numOfSeats; index++){
+     seats[index] = side === "left"
       ? { status: SeatStatus.FREE, row: rowNumber, column: index }
       : {
           status: SeatStatus.FREE,
           row: rowNumber,
           column: index + numOfSeats + 1
         };
-  });
+  }
+  return seats;
 };
 
 export const createAisleBlockWithRows = (

@@ -75,6 +75,7 @@ export interface IPerson {
 
 export interface IPlane {
   rows: number; //includes AisleBlock and EmptyAisleBlock
+  seatsRows: number;
   columns: number; // includes the aisle/center column
   spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
@@ -82,6 +83,7 @@ export interface IPlane {
 
   getAisle(): Array<AisleBlock | EmptyAisleBlock>;
   getCenter(): number;
+  getNumberOfSeats(): number;
   initSeats(): void;
 }
 

@@ -5,6 +5,11 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
   length: number;
 
   constructor(arrayOfPassangers: IPerson[]) {
+    arrayOfPassangers.forEach((p, index) => {
+      if (index !== 0) p.frontPerson = arrayOfPassangers[index - 1];
+      if (index !== arrayOfPassangers.length - 1)
+        p.backPerson = arrayOfPassangers[index + 1];
+    });
     this.passangers = arrayOfPassangers;
     this.length = this.passangers.length;
   }

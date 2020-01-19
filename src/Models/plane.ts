@@ -8,6 +8,7 @@ import { IPlane } from "./interfaces";
 
 class Plane implements IPlane {
   rows: number;
+  seatsRows: number;
   columns: number;
   spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
@@ -18,6 +19,7 @@ class Plane implements IPlane {
     spaceBetweenRows: number,
     seatsInHalfRow: number
   ) {
+    this.seatsRows = seatsRows;
     this.rows = seatsRows + (seatsRows - 1) * spaceBetweenRows;
     this.columns = seatsInHalfRow * 2 + 1;
     this.spaceBetweenRows = spaceBetweenRows;
@@ -37,6 +39,10 @@ class Plane implements IPlane {
 
   getCenter(): number {
     return this.centerColumn;
+  }
+
+  getNumberOfSeats(): number {
+    return this.seatsRows;
   }
 
   initSeats() {

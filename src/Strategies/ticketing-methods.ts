@@ -13,7 +13,7 @@ const getRandomFreeSeat = (aisleBlocks: Array<AisleBlock>): Seat => {
   let block: AisleBlock = _.sample(
     _.shuffle(aisleBlocks.filter(block => !block.fullyAssigned))
   );
-  let freeSeats = _.flat([block.leftRow, block.rightRow]).filter(
+  let freeSeats = block.leftRow.concat(block.rightRow).filter(
     (s: Seat) => s.status === SeatStatus.FREE
   );
   return _.sample(freeSeats);

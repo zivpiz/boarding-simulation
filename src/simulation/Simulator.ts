@@ -1,8 +1,14 @@
 import Plane from "../Models/plane";
 import Person from "../Models/Person";
 import Passengers from "../Models/passengers";
-import { ISimulator, IPlane, IActivePersonsQueue, IInactivePersonsSet, IPerson } from '../Models/interfaces';
-import {Direction, Position} from '../Models/types';
+import {
+  ISimulator,
+  IPlane,
+  IActivePersonsQueue,
+  IInactivePersonsSet,
+  IPerson
+} from "../Models/interfaces";
+import { Direction, Position } from "../Models/types";
 import { InactivePersonsSet } from "../Models/InactivePersonsSet";
 
 /*
@@ -52,9 +58,10 @@ export class Simulator implements ISimulator {
   }
 
   simulate(): number {
-    while (this.activePersons.length > 0) { //while there is someone who is not sitting
+    while (this.activePersons.length > 0) {
+      //while there is someone who is not sitting
       this.iterations++;
-      
+
       this.activePersons.forEach((person: IPerson) => {
         person.initPercentage();
 
@@ -66,7 +73,7 @@ export class Simulator implements ISimulator {
           } else {
             this.walkInRow(person);
           }
-        }        
+        }
       });
     }
     return this.iterations;
@@ -85,9 +92,11 @@ export class Simulator implements ISimulator {
     }
     if (!isPersonBlocked && !person.hasMoreLuggage()) {
       person.updateDirectionAccordinToTarget();
-      if (person.getDirection() === Direction.FORWARD) { //person in his way out (trying to empty the row)
+      if (person.getDirection() === Direction.FORWARD) {
+        //person in his way out (trying to empty the row)
         this.walkInAilse(person);
-      } else { //person in his way in
+      } else {
+        //person in his way in
         this.personGetsIntoHisRow(person);
       }
     }
@@ -98,27 +107,35 @@ export class Simulator implements ISimulator {
     if (arrivedHisRow) {
       this.handlePersonInHisRowButInAisle(person);
     }
-  } 
+  }
 
   private walkInRow(person: IPerson) {
     let arrivedHisSeat = person.rowStep();
     if (arrivedHisSeat) {
       this.activePersons.remove(person);
       this.inactivePersons.add(person);
-    }
-    else if (this.isPersonInAisle(person)) {
+    } else if (this.isPersonInAisle(person)) {
       this.handlePersonInHisRowButInAisle(person);
     }
   }
 
   private personGetsIntoHisRow(person: IPerson) {
-    person.getBackPerson().setFrontPerson(person.getFrontPerson());
-    person.getFrontPerson().setBackPerson(person.getBackPerson());
+    let frontPerson = person.getFrontPerson();
+    let backPerson = person.getBackPerson();
+    if (frontPerson && backPerson) {
+      backPerson.setFrontPerson(frontPerson);
+      frontPerson.setBackPerson(backPerson);
+    } else if (frontPerson) frontPerson.setBackPerson(null);
+    else if (backPerson) backPerson.setFrontPerson(null);
+
     this.walkInRow(person);
   }
 
   private tellPersonToWalkOneStepBack(person: IPerson) {
-    person.setTarget({row: person.getPosition().row-1, column: person.getPosition().column});
+    person.setTarget({
+      row: person.getPosition().row - 1,
+      column: person.getPosition().column
+    });
   }
 
   // private changeDirectionToEnterRow(person: IPerson): void {
@@ -144,16 +161,18 @@ export class Simulator implements ISimulator {
 
   //tell the blockers in the row to empty the row.
   private notifyAllSittingBlockersOfPerson(person: IPerson) {
-    let blockers: Array<IPerson> = this.inactivePersons.getAllBlockersOfPerson(person);
+    let blockers: Array<IPerson> = this.inactivePersons.getAllBlockersOfPerson(
+      person
+    );
     let numOfBlockers: number = blockers.length;
     let rowNumber: number = blockers[0].getPosition().row;
     let aisleColumnNum: number = this.plane.getCenter();
-    for (let i=0; i< numOfBlockers; i++) {
+    for (let i = 0; i < numOfBlockers; i++) {
       let blocker: IPerson = blockers[i];
-      blocker.setTarget({column: aisleColumnNum, row: rowNumber+i+1});
+      blocker.setTarget({ column: aisleColumnNum, row: rowNumber + i + 1 });
       blocker.setBlockedPerson(person);
       this.activePersons.addToQueueBefore(blocker, person);
-    }    
+    }
   }
 
   getPlane(): IPlane {

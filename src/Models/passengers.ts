@@ -11,11 +11,12 @@ export default class Passengers implements IPassengers {
   plane: Plane;
 
   constructor(plane: Plane, numOfPassengers: number) {
-    const numOfPlaneSeats = plane.rows * plane.columns;
+    const numOfPlaneSeats = plane.getNumberOfSeats();
     if (numOfPassengers > numOfPlaneSeats) numOfPassengers = numOfPlaneSeats;
+    this.plane = plane;
     this.plane.initSeats();
     this.passengers = this.initPersons(plane, numOfPassengers);
-    this.assignTicketsBy(TicketAssignmetMode.RANDOM)
+    this.assignTicketsBy(TicketAssignmetMode.RANDOM);
   }
 
   getPassengers() {
@@ -32,14 +33,23 @@ export default class Passengers implements IPassengers {
     }
     return persons;
   }
+
+  setPassengersTargetToTicket(passengers: Array<Person>): Array<Person> {
+    passengers.forEach(p => p.setTarget(p.ticket));
+    return this.passengers;
+  }
   //assign tickets to passengers by mode
   //return passengers
   assignTicketsBy(mode: TicketAssignmetMode): Array<Person> {
     switch (mode) {
       case TicketAssignmetMode.RANDOM:
-        return ticketingMethods.assignRandomly(this.plane, this.passengers);
+        return this.setPassengersTargetToTicket(
+          ticketingMethods.assignRandomly(this.plane, this.passengers)
+        );
       default:
-        return ticketingMethods.assignRandomly(this.plane, this.passengers);
+        return this.setPassengersTargetToTicket(
+          ticketingMethods.assignRandomly(this.plane, this.passengers)
+        );
     }
   }
   //create sort queue by mode.

@@ -279,7 +279,7 @@ export default class Person implements IPerson {
   hasMoreLuggage(): boolean {
     return this.luggageCount !== 0;
   }
-  //this.position === this.ticket aisle center
+  //this.position === this.ticket center of aisle
   updateDirectionAccordinToTarget(): Direction {
     let newDir: Direction;
     let centerPos: Position = this.position;
