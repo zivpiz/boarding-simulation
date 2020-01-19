@@ -29,7 +29,7 @@ export default class Passengers implements IPassengers {
       persons[i] = new Person(
         plane.spaceBetweenRows,
         {
-          row: -1 * i,
+          row: i == 0 ? 0 : -1 * i,
           column: plane.getCenter()
         },
         i
