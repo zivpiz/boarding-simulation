@@ -9,6 +9,7 @@ import {
 } from "./types";
 
 export interface IPerson {
+  id: number;
   xSpeed: number; //row speed
   ySpeed: number; //aisle speed
   luggageDelay: number; //iterations for luggage

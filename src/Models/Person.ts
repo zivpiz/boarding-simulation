@@ -297,4 +297,20 @@ export default class Person implements IPerson {
     this.direction = newDir;
     return newDir;
   }
+
+  toString(): string {
+    return (
+    `id: ${this.id}, 
+    xSpeed: ${this.xSpeed},
+    ySpeed: ${this.ySpeed},
+    luggageDelay: ${this.luggageDelay},
+    luggageCount: ${this.luggageCount},
+    position: ${this.position},
+    frontPerson: ${this.frontPerson.id},
+    backPerson: ${this.backPerson.id},
+    blockedPerson: ${this.blockedPerson.id},
+    direction: ${this.direction},
+    ticket: ${this.ticket},
+    percentage: ${this.percentage}`);
+  }
 }
