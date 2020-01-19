@@ -144,14 +144,6 @@ export class Simulator implements ISimulator {
     });
   }
 
-  // private changeDirectionToEnterRow(person: IPerson): void {
-  //   person.setDirection(Direction.ENTER);
-  // }
-  //
-  // private changeDirectionToForward(person: IPerson): void {
-  //   person.setDirection(Direction.FORWARD);
-  // }
-
   private isPersonBlockedInRow(person: IPerson): boolean {
     return this.inactivePersons.isPersonBlocked(person);
   }
