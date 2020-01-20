@@ -65,9 +65,6 @@ export class Simulator implements ISimulator {
       this.activePersons.forEach((person: IPerson) => {
         person.initPercentage();
 
-        //fix in case of: person atSeatAisle and isPersonInAisle(person)
-        //but person target = one step back to make room for other persons
-        //to clear the aisle
         if (person.atSeatAisle() && this.isPersonInAisle(person)) {
           this.handlePersonInHisRowButInAisle(person);
         } else {
@@ -91,8 +88,11 @@ export class Simulator implements ISimulator {
     if (person.hasMoreLuggage()) {
       person.putLuggage();
     }
-    if (isPersonBlocked && !person.hasMoreLuggage()) {
-      this.tellPersonToWalkOneStepBack(person);
+    if (isPersonBlocked && !person.hasMoreLuggage()) { //person needs to walk one step back
+      if (person.getDirection() != Direction.BACKWARD) {
+        this.tellPersonToWalkOneStepBack(person);
+      }
+      this.walkInAilse(person);
     }
     if (!isPersonBlocked && !person.hasMoreLuggage()) {
       //person finished with his luggage and no one blocks him.
