@@ -14,7 +14,7 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     }
 
     getAllBlockersOfPerson(person: IPerson): IPerson[] {
-        let blockers: IPerson[];
+        let blockers: IPerson[] = [];
         const {row, column} = person.getPosition();
         const ticketColumn = person.getTicket().column;
         this.passangers.forEach((sittingPerson: IPerson) => {
