@@ -1,16 +1,17 @@
 import * as _ from "lodash";
-import { SeatingMode } from "../Models/types";
+import { SeatingMode, TicketAssignmetMode } from "../Models/types";
 import Plane from "../Models/plane";
 import Passengers from "../Models/passengers";
 import ActivePersonsQueue from "../Models/ActivePersonsQueue";
 import { Simulator } from "./Simulator";
 
 export const runSimulation = (
-  numberOfRows,
-  spaceBetweenRows,
-  numberOfSeatsInHalfRow,
-  numberOfPassengers,
-  seatingMode
+  numberOfRows: number,
+  spaceBetweenRows: number,
+  numberOfSeatsInHalfRow: number,
+  numberOfPassengers: number,
+  seatingMode: SeatingMode,
+  ticketingMode: TicketAssignmetMode
 ) => {
   const plane = new Plane(
     numberOfRows,
@@ -18,6 +19,7 @@ export const runSimulation = (
     numberOfSeatsInHalfRow
   );
   const passengers = new Passengers(plane, numberOfPassengers);
+  passengers.assignTicketsBy(ticketingMode);
   passengers.boardingBy(seatingMode);
   const boardingQueue = new ActivePersonsQueue(passengers.getPassengers());
 
@@ -26,25 +28,36 @@ export const runSimulation = (
 };
 
 export const findBestSeatingMode = (
-  numberOfRows,
-  spaceBetweenRows,
-  numberOfSeatsInHalfRow,
-  numberOfPassengers
-): Array<{ mode: SeatingMode; result: number }> => {
-  //Array of [{mode: __, result: __}, {mode: __, result: __}..] for all seating modes
-  const seatingModes = Object.values(SeatingMode).map(seatingMode => {
-    return { mode: seatingMode, result: -1 };
+  numberOfRows: number,
+  spaceBetweenRows: number,
+  numberOfSeatsInHalfRow: number,
+  numberOfPassengers: number,
+  ticketingMode: TicketAssignmetMode
+): Array<{
+  ticketingMode: TicketAssignmetMode;
+  seatingMode: SeatingMode;
+  result: number;
+}> => {
+  //Array of [{ticketingMode: __, seatingMode: __, result: __}, {ticketingMode: __, seatingMode: __, result: __}..]
+  //for all seating modes
+  const modes = Object.values(SeatingMode).map(seatingMode => {
+    return {
+      ticketingMode: ticketingMode,
+      seatingMode: seatingMode,
+      result: -1
+    };
   });
 
-  seatingModes.forEach(seatingMode => {
-    seatingMode.result = runSimulation(
+  modes.forEach(mode => {
+    mode.result = runSimulation(
       numberOfRows,
       spaceBetweenRows,
       numberOfSeatsInHalfRow,
       numberOfPassengers,
-      seatingMode.mode
+      mode.seatingMode,
+      mode.ticketingMode
     );
   });
 
-  return _.sortBy(seatingModes, "result");
+  return _.sortBy(modes, "result");
 };

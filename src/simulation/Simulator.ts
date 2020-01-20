@@ -115,27 +115,29 @@ export class Simulator implements ISimulator {
     }
   }
 
-  private walkInRow(person: IPerson) {
+  //return true if person in the row
+  private walkInRow(person: IPerson): boolean {
     let arrivedHisSeat = person.rowStep();
     if (arrivedHisSeat) {
       this.activePersons.remove(person);
       this.inactivePersons.add(person);
     }
+    return this.isPersonInAisle(person);
     // else if (this.isPersonInAisle(person)) {
     //   this.handlePersonInHisRowButInAisle(person);
     // }
   }
 
   private personGetsIntoHisRow(person: IPerson) {
-    let frontPerson = person.getFrontPerson();
-    let backPerson = person.getBackPerson();
-    if (frontPerson && backPerson) {
-      backPerson.setFrontPerson(frontPerson);
-      frontPerson.setBackPerson(backPerson);
-    } else if (frontPerson) frontPerson.setBackPerson(null);
-    else if (backPerson) backPerson.setFrontPerson(null);
-
-    this.walkInRow(person);
+    if (!this.walkInRow(person)) {
+      let frontPerson = person.getFrontPerson();
+      let backPerson = person.getBackPerson();
+      if (frontPerson && backPerson) {
+        backPerson.setFrontPerson(frontPerson);
+        frontPerson.setBackPerson(backPerson);
+      } else if (frontPerson) frontPerson.setBackPerson(null);
+      else if (backPerson) backPerson.setFrontPerson(null);
+    }
   }
 
   private tellPersonToWalkOneStepBack(person: IPerson) {

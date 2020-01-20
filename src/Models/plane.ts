@@ -21,18 +21,25 @@ class Plane implements IPlane {
     seatsInHalfRow: number
   ) {
     this.seatsRows = seatsRows;
-    this.rows = seatsRows + (seatsRows - 1) * spaceBetweenRows;
+    this.rows = seatsRows + seatsRows * spaceBetweenRows;
     this.columns = seatsInHalfRow * 2 + 1;
     this.spaceBetweenRows = spaceBetweenRows;
     this.centerColumn = seatsInHalfRow;
     this.numberOfSeats = seatsRows * seatsInHalfRow * 2;
     this.aisle = new Array<AisleBlock | EmptyAisleBlock>(this.rows);
 
-    for (let i = 0; i < this.rows; i++) {
+    let preAisle = Array<EmptyAisleBlock>(spaceBetweenRows).fill(
+      createAisleBlockWithoutRows()
+    );
+    for (let i = 0; i < this.rows - this.spaceBetweenRows; i++) {
       if (i % (spaceBetweenRows + 1) === 0)
-        this.aisle[i] = createAisleBlockWithRows(i, seatsInHalfRow);
+        this.aisle[i] = createAisleBlockWithRows(
+          i + spaceBetweenRows,
+          seatsInHalfRow
+        );
       else this.aisle[i] = createAisleBlockWithoutRows();
     }
+    this.aisle.unshift(...preAisle);
   }
 
   getAisle(): Array<AisleBlock | EmptyAisleBlock> {

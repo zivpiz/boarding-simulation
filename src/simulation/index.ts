@@ -1,5 +1,5 @@
 import userInput from "./userInput";
-import { SeatingMode } from "../Models/types";
+import { SeatingMode, TicketAssignmetMode } from "../Models/types";
 import { findBestSeatingMode, runSimulation } from "./simulationUtils";
 
 //Gets parameters from user input, including seating mode and returns the simulation result
@@ -9,7 +9,8 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
     spaceBetweenRows,
     numberOfSeatsInHalfRow,
     numberOfPassengers,
-    seatingMode
+    seatingMode,
+    ticketingMode
   } = userInput;
 
   const simulationResult = runSimulation(
@@ -17,7 +18,8 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
     spaceBetweenRows,
     numberOfSeatsInHalfRow,
     numberOfPassengers,
-    seatingMode
+    seatingMode,
+    ticketingMode
   );
   console.log("User based simulation result is:", simulationResult);
   return simulationResult;
@@ -25,21 +27,24 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
 
 //Gets parameters from user input and returns an array of best to worst seating modes
 const findBestSeatingModeForUserInput = (): Array<{
-  mode: SeatingMode;
+  ticketingMode: TicketAssignmetMode;
+  seatingMode: SeatingMode;
   result: number;
 }> => {
   const {
     numberOfRows,
     spaceBetweenRows,
     numberOfSeatsInHalfRow,
-    numberOfPassengers
+    numberOfPassengers,
+    ticketingMode
   } = userInput;
 
   return findBestSeatingMode(
     numberOfRows,
     spaceBetweenRows,
     numberOfSeatsInHalfRow,
-    numberOfPassengers
+    numberOfPassengers,
+    ticketingMode
   );
 };
 

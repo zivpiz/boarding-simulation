@@ -20,7 +20,7 @@ export default class Person implements IPerson {
   constructor(spaceBetweenRows: number, position: Position, id: number) {
     this.id = id;
     this.xSpeed = 1;
-    this.ySpeed = generateRandomSpeed(Speed.Y, spaceBetweenRows);
+    this.ySpeed = generateRandomSpeed(Speed.Y, spaceBetweenRows * 2);
     this.luggageDelay = generateRandomSpeed(Speed.LUGGADE);
     this.luggageCount = generateRandomNatNumber(0, 3);
     this.position = position;
@@ -170,13 +170,14 @@ export default class Person implements IPerson {
   //depend on this position, target, frontPerson, ySpeed
   //and precentage
   private getForwardYSteps(): number {
-    let farAsPossible = this.frontPerson
+    let farthestRowTarget = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
         ? this.frontPerson.atSeatAisle()
           ? this.frontPerson.position.row - 2
           : this.frontPerson.position.row - 1
         : this.target.row
       : this.target.row;
+    let farAsPossible = Math.abs(farthestRowTarget - this.position.row);
     farAsPossible = Math.min(farAsPossible, this.ySpeed);
     return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
@@ -184,11 +185,12 @@ export default class Person implements IPerson {
   //depend on this position, target, backPerson and ySpeed
   //and precentage
   private getBackwardYSteps(): number {
-    let farAsPossible = this.backPerson
+    let farthestRowTarget = this.backPerson
       ? this.target.row <= this.backPerson.position.row
         ? this.backPerson.position.row - 1
         : this.target.row
       : this.target.row;
+    let farAsPossible = Math.abs(farthestRowTarget - this.position.row);
     farAsPossible = Math.min(farAsPossible, this.ySpeed);
     return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
@@ -241,7 +243,7 @@ export default class Person implements IPerson {
   //back to seat if at target
   //return true if at this seat aisle
   aisleStep(): boolean {
-    if (this.atTarget) this.backToSeat;
+    if (this.atTarget()) this.backToSeat;
     let aisleSteps: number =
       this.direction === Direction.FORWARD
         ? this.getForwardYSteps()

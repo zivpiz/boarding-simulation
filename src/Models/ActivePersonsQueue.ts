@@ -1,7 +1,7 @@
 import { IActivePersonsQueue, IPerson } from "./interfaces";
 
 export default class ActivePersonsQueue implements IActivePersonsQueue {
-  private passangers: IPerson[];
+  private passengers: IPerson[];
   length: number;
 
   constructor(arrayOfPassangers: IPerson[]) {
@@ -10,19 +10,19 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
       if (index !== arrayOfPassangers.length - 1)
         p.backPerson = arrayOfPassangers[index + 1];
     });
-    this.passangers = arrayOfPassangers;
-    this.length = this.passangers.length;
+    this.passengers = arrayOfPassangers;
+    this.length = this.passengers.length;
   }
 
   getQueueAsArray(): IPerson[] {
-    return this.passangers;
+    return this.passengers;
   }
 
   addToQueueBefore(personToAdd: IPerson, before: IPerson) {
     personToAdd.setBackPerson(before);
     let index = this.getPersonIndex(personToAdd);
-    personToAdd.setFrontPerson(this.passangers[index + 1]);
-    this.passangers.splice(index, 0, personToAdd);
+    personToAdd.setFrontPerson(this.passengers[index + 1]);
+    this.passengers.splice(index, 0, personToAdd);
     this.length++;
   }
 
@@ -40,15 +40,15 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
     }
 
     let index = this.getPersonIndex(personToRemove);
-    this.passangers.splice(index, 1);
+    this.passengers.splice(index, 1);
     this.length--;
   }
 
   forEach(lambda: (element: IPerson) => void) {
-    this.passangers.forEach(lambda);
+    this.passengers.forEach(lambda);
   }
 
   private getPersonIndex(person: IPerson) {
-    return this.passangers.findIndex(element => element === person);
+    return this.passengers.findIndex(element => element === person);
   }
 }
