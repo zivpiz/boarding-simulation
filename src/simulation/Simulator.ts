@@ -91,9 +91,9 @@ export class Simulator implements ISimulator {
     if (isPersonBlocked && !person.hasMoreLuggage()) {
       this.tellPersonToWalkOneStepBack(person);
     }
-    if (!isPersonBlocked && !person.hasMoreLuggage()) { 
+    if (!isPersonBlocked && !person.hasMoreLuggage()) {
       //person finished with his luggage and no one blocks him.
-      //person can be here in 3 cases: 
+      //person can be here in 3 cases:
       //1. person start walk into his seat from the aisle.
       //2. person empty the row for someone
       //3. person returns to his seat after he empty the row for someone
@@ -120,9 +120,10 @@ export class Simulator implements ISimulator {
     if (arrivedHisSeat) {
       this.activePersons.remove(person);
       this.inactivePersons.add(person);
-    } else if (this.isPersonInAisle(person)) {
-      this.handlePersonInHisRowButInAisle(person);
     }
+    // else if (this.isPersonInAisle(person)) {
+    //   this.handlePersonInHisRowButInAisle(person);
+    // }
   }
 
   private personGetsIntoHisRow(person: IPerson) {

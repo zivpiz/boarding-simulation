@@ -46,6 +46,5 @@ export const findBestSeatingMode = (
     );
   });
 
-  _.sortBy(seatingModes, "result");
-  return seatingModes;
+  return _.sortBy(seatingModes, "result");
 };

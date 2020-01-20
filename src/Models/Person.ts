@@ -294,7 +294,7 @@ export default class Person implements IPerson {
     else if (centerPos.row === target.row && centerPos.column !== target.column)
       newDir = Direction.ENTER;
     else {
-      console.log("PERSON", this);
+      // console.log("PERSON", this);
       throw "This Person is not in the middle of his seat ticket aisle";
     }
     this.direction = newDir;

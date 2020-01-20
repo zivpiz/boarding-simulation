@@ -13,6 +13,7 @@ class Plane implements IPlane {
   spaceBetweenRows: number;
   aisle: Array<AisleBlock | EmptyAisleBlock>;
   centerColumn: number;
+  numberOfSeats: number;
 
   constructor(
     seatsRows: number,
@@ -24,6 +25,7 @@ class Plane implements IPlane {
     this.columns = seatsInHalfRow * 2 + 1;
     this.spaceBetweenRows = spaceBetweenRows;
     this.centerColumn = seatsInHalfRow;
+    this.numberOfSeats = seatsRows * seatsInHalfRow * 2;
     this.aisle = new Array<AisleBlock | EmptyAisleBlock>(this.rows);
 
     for (let i = 0; i < this.rows; i++) {
@@ -42,7 +44,7 @@ class Plane implements IPlane {
   }
 
   getNumberOfSeats(): number {
-    return this.seatsRows;
+    return this.numberOfSeats;
   }
 
   initSeats() {

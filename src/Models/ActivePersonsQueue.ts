@@ -27,12 +27,18 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
   }
 
   remove(personToRemove: IPerson) {
-    personToRemove
-      .getBackPerson()
-      .setFrontPerson(personToRemove.getFrontPerson());
-    personToRemove
-      .getFrontPerson()
-      .setBackPerson(personToRemove.getBackPerson());
+    if (personToRemove.getBackPerson()) {
+      personToRemove
+        .getBackPerson()
+        .setFrontPerson(personToRemove.getFrontPerson());
+    }
+
+    if (personToRemove.getFrontPerson()) {
+      personToRemove
+        .getFrontPerson()
+        .setBackPerson(personToRemove.getBackPerson());
+    }
+
     let index = this.getPersonIndex(personToRemove);
     this.passangers.splice(index, 1);
     this.length--;
