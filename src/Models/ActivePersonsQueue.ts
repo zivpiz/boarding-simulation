@@ -20,8 +20,11 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
 
   addToQueueBefore(personToAdd: IPerson, before: IPerson) {
     personToAdd.setBackPerson(before);
-    let index = this.getPersonIndex(personToAdd);
-    personToAdd.setFrontPerson(this.passengers[index + 1]);
+    personToAdd.setFrontPerson(before.getFrontPerson());
+    before.setFrontPerson(personToAdd);
+    let index = this.getPersonIndex(before);
+    if (index < 0) throw '"before" person is not in Active Queue passengers';
+    // personToAdd.setFrontPerson(this.passengers[index + 1]);
     this.passengers.splice(index, 0, personToAdd);
     this.length++;
   }

@@ -81,8 +81,7 @@ export default class Person implements IPerson {
     if (currDir === Direction.FORWARD || currDir === Direction.BACKWARD)
       newDir =
         currPos.row > newTarget.row ? Direction.BACKWARD : Direction.FORWARD;
-    else
-      newDir = this.target === this.ticket ? Direction.ENTER : Direction.LEAVE;
+    else newDir = newTarget === this.ticket ? Direction.ENTER : Direction.LEAVE;
     this.target = newTarget;
     this.direction = newDir;
   }
@@ -301,6 +300,24 @@ export default class Person implements IPerson {
     }
     this.direction = newDir;
     return newDir;
+  }
+
+  canMakeStep(): boolean {
+    let canWalk = (steps: number): boolean => steps > 0;
+    switch (this.direction) {
+      case Direction.FORWARD:
+      case Direction.BACKWARD:
+        return canWalk(
+          this.getValuePerPrecentage(this.percentage, this.ySpeed)
+        );
+      case Direction.ENTER:
+      case Direction.LEAVE:
+        return canWalk(
+          this.getValuePerPrecentage(this.percentage, this.xSpeed)
+        );
+      default:
+        throw "This person have no Direction";
+    }
   }
 
   toString(): string {

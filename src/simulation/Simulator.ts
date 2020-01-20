@@ -65,6 +65,9 @@ export class Simulator implements ISimulator {
       this.activePersons.forEach((person: IPerson) => {
         person.initPercentage();
 
+        //fix in case of: person atSeatAisle and isPersonInAisle(person)
+        //but person target = one step back to make room for other persons
+        //to clear the aisle
         if (person.atSeatAisle() && this.isPersonInAisle(person)) {
           this.handlePersonInHisRowButInAisle(person);
         } else {
@@ -98,7 +101,10 @@ export class Simulator implements ISimulator {
       //2. person empty the row for someone
       //3. person returns to his seat after he empty the row for someone
       person.updateDirectionAccordinToTarget();
-      if (person.getDirection() === Direction.FORWARD) {
+      if (
+        person.getDirection() === Direction.FORWARD ||
+        person.getDirection() === Direction.BACKWARD
+      ) {
         //person in his way out (trying to empty the row)
         this.walkInAilse(person);
       } else {
@@ -121,11 +127,11 @@ export class Simulator implements ISimulator {
     if (arrivedHisSeat) {
       this.activePersons.remove(person);
       this.inactivePersons.add(person);
+    } else if (this.isPersonInAisle(person) && person.canMakeStep()) {
+      person.updateDirectionAccordinToTarget();
+      this.handlePersonInHisRowButInAisle(person);
     }
     return this.isPersonInAisle(person);
-    // else if (this.isPersonInAisle(person)) {
-    //   this.handlePersonInHisRowButInAisle(person);
-    // }
   }
 
   private personGetsIntoHisRow(person: IPerson) {

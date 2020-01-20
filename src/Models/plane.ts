@@ -31,7 +31,7 @@ class Plane implements IPlane {
     let preAisle = Array<EmptyAisleBlock>(spaceBetweenRows).fill(
       createAisleBlockWithoutRows()
     );
-    for (let i = 0; i < this.rows - this.spaceBetweenRows; i++) {
+    for (let i = 0; i < this.rows; i++) {
       if (i % (spaceBetweenRows + 1) === 0)
         this.aisle[i] = createAisleBlockWithRows(
           i + spaceBetweenRows,

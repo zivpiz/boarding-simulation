@@ -72,6 +72,7 @@ export interface IPerson {
   //and target === ticket, else, return false
   rowStep(): boolean;
   updateDirectionAccordinToTarget(): Direction;
+  canMakeStep(): boolean;
   toString(): String;
 }
 

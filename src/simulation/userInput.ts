@@ -1,6 +1,6 @@
 import { SeatingMode, TicketAssignmetMode } from "../Models/types";
 
-const numberOfRows = 7;
+const numberOfRows = 3;
 const spaceBetweenRows = 2;
 const numberOfSeatsInHalfRow = 3;
 
