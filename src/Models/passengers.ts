@@ -50,6 +50,14 @@ export default class Passengers implements IPassengers {
         return this.setPassengersTargetToTicket(
           ticketingMethods.assignRandomly(this.plane, this.passengers)
         );
+      case TicketAssignmetMode.FRONT_TO_BACK:
+        return this.setPassengersTargetToTicket(
+          ticketingMethods.frontToBack(this.plane, this.passengers)
+        );
+      case TicketAssignmetMode.BACK_TO_FRONT:
+        return this.setPassengersTargetToTicket(
+          ticketingMethods.backToFront(this.plane, this.passengers)
+        );
       default:
         return this.setPassengersTargetToTicket(
           ticketingMethods.assignRandomly(this.plane, this.passengers)

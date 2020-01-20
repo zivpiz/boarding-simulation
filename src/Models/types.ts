@@ -44,7 +44,9 @@ export type Seat = {
 };
 
 export enum TicketAssignmetMode {
-  RANDOM = "random"
+  RANDOM = "random",
+  FRONT_TO_BACK = "front_to_back",
+  BACK_TO_FRONT = "back_to_fron"
 }
 
 export type Position = {
