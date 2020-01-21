@@ -1,4 +1,5 @@
 import { IActivePersonsQueue, IPerson } from "./interfaces";
+import { Direction } from "./types";
 
 export default class ActivePersonsQueue implements IActivePersonsQueue {
   private passengers: IPerson[];
@@ -19,32 +20,78 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
   }
 
   addToQueueBefore(personToAdd: IPerson, before: IPerson) {
-    personToAdd.setBackPerson(before);
-    personToAdd.setFrontPerson(before.getFrontPerson());
-    before.setFrontPerson(personToAdd);
-    let index = this.getPersonIndex(before);
-    if (index < 0) throw '"before" person is not in Active Queue passengers';
-    // personToAdd.setFrontPerson(this.passengers[index + 1]);
-    this.passengers.splice(index, 0, personToAdd);
-    this.length++;
+    if (!this.passengers.includes(personToAdd)) {
+      personToAdd.setBackPerson(before);
+      personToAdd.setFrontPerson(before.getFrontPerson());
+      before.setFrontPerson(personToAdd);
+      let index = this.getPersonIndex(before);
+      if (index < 0) throw '"before" person is not in Active Queue passengers';
+      // personToAdd.setFrontPerson(this.passengers[index + 1]);
+      this.passengers.splice(index, 0, personToAdd);
+      this.length++;
+    }
   }
 
   remove(personToRemove: IPerson) {
-    if (personToRemove.getBackPerson()) {
-      personToRemove
-        .getBackPerson()
-        .setFrontPerson(personToRemove.getFrontPerson());
-    }
+    if (this.passengers.includes(personToRemove)) {
+      if (personToRemove.getBackPerson()) {
+        personToRemove
+          .getBackPerson()
+          .setFrontPerson(personToRemove.getFrontPerson());
+      }
 
-    if (personToRemove.getFrontPerson()) {
-      personToRemove
-        .getFrontPerson()
-        .setBackPerson(personToRemove.getBackPerson());
-    }
+      if (personToRemove.getFrontPerson()) {
+        personToRemove
+          .getFrontPerson()
+          .setBackPerson(personToRemove.getBackPerson());
+      }
 
-    let index = this.getPersonIndex(personToRemove);
-    this.passengers.splice(index, 1);
-    this.length--;
+      let index = this.getPersonIndex(personToRemove);
+      this.passengers.splice(index, 1);
+      this.length--;
+    }
+  }
+
+  isPersonBlocked(person: IPerson): boolean {
+    const { row, column } = person.getPosition();
+    const ticketColumn = person.getTicket().column;
+    return Array.from(this.passengers).some((activePerson: IPerson) => {
+      let activeRow = activePerson.getPosition().row;
+      let activeColumn = activePerson.getPosition().column;
+      let isOther = activePerson !== person;
+      let rightBlock = ticketColumn > column && activeColumn < ticketColumn;
+      let leaverBlock =
+        activeColumn === ticketColumn &&
+        person.getDirection() === Direction.LEAVE;
+      let leftBlock = ticketColumn < column && activeColumn > ticketColumn;
+      return (
+        isOther && activeRow === row && (rightBlock || leaverBlock || leftBlock)
+      );
+    });
+  }
+
+  getAllBlockersOfPerson(person: IPerson): IPerson[] {
+    let blockers: IPerson[] = [];
+    const { row, column } = person.getPosition();
+    const ticketColumn = person.getTicket().column;
+    blockers = this.passengers.filter((activePerson: IPerson) => {
+      let activeRow = activePerson.getPosition().row;
+      let activeColumn = activePerson.getPosition().column;
+      let isOther = activePerson !== person;
+      let rightBlock = ticketColumn > column && activeColumn < ticketColumn;
+      let leaverBlock =
+        activeColumn === ticketColumn &&
+        person.getDirection() === Direction.LEAVE;
+      let leftBlock = ticketColumn < column && activeColumn > ticketColumn;
+      return (
+        isOther && activeRow === row && (rightBlock || leaverBlock || leftBlock)
+      );
+    });
+    const mult = ticketColumn > column ? 1 : -1;
+    blockers.sort((a: IPerson, b: IPerson) => {
+      return (a.getPosition().column - b.getPosition().column) * mult;
+    });
+    return blockers;
   }
 
   forEach(lambda: (element: IPerson) => void) {

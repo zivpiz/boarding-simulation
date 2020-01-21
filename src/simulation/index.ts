@@ -48,4 +48,4 @@ const findBestSeatingModeForUserInput = (): Array<{
   );
 };
 
-findBestSeatingModeForUserInput();
+console.log(findBestSeatingModeForUserInput());

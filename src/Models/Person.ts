@@ -16,6 +16,7 @@ export default class Person implements IPerson {
   blockedPerson: IPerson; //the person who blocked by me in the row
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
+  centerPlaneCol: number;
 
   constructor(spaceBetweenRows: number, position: Position, id: number) {
     this.id = id;
@@ -30,6 +31,7 @@ export default class Person implements IPerson {
     this.direction = Direction.FORWARD;
     this.ticket = null;
     this.percentage = 0;
+    this.centerPlaneCol = position.column;
   }
 
   getTicket(): Position {
@@ -95,6 +97,10 @@ export default class Person implements IPerson {
 
   initPercentage(): void {
     this.percentage = 100;
+  }
+
+  consumePrecentage(): void {
+    this.percentage = 0;
   }
 
   private getValuePerPrecentage(percentage: number, value: number): number {
@@ -165,41 +171,64 @@ export default class Person implements IPerson {
   atSeatAisle(): boolean {
     return this.position.row === this.ticket.row;
   }
+  private getMaxStepsOfCurrPrecentage(steps: number, speed: Speed): number {
+    const hasEnough = (steps: number): boolean =>
+      this.precentagePerSpeedValue(steps, speed) <= this.percentage;
+    while (steps > 0 && !hasEnough(steps)) {
+      steps--;
+    }
+    return steps;
+  }
   //return the number of aisleBlocks to move forward
   //depend on this position, target, frontPerson, ySpeed
   //and precentage
   private getForwardYSteps(): number {
     let farthestRowTarget = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
-        ? this.frontPerson.atSeatAisle()
+        ? this.frontPerson.atSeatAisle() &&
+          this.frontPerson.direction !== Direction.LEAVE
           ? this.frontPerson.position.row - 2
           : this.frontPerson.position.row - 1
         : this.target.row
       : this.target.row;
-    let farAsPossible = Math.abs(farthestRowTarget - this.position.row);
-    farAsPossible = Math.min(farAsPossible, this.ySpeed);
-    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+    let steps = Math.abs(farthestRowTarget - this.position.row);
+    steps = Math.min(steps, this.ySpeed);
+    return this.getMaxStepsOfCurrPrecentage(steps, Speed.Y);
+    // return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   //return the number of aisleBlocks to move backward
   //depend on this position, target, backPerson and ySpeed
   //and precentage
   private getBackwardYSteps(): number {
-    let farthestRowTarget = this.backPerson
-      ? this.target.row <= this.backPerson.position.row
-        ? this.backPerson.position.row - 1
-        : this.target.row
-      : this.target.row;
-    let farAsPossible = Math.abs(farthestRowTarget - this.position.row);
-    farAsPossible = Math.min(farAsPossible, this.ySpeed);
-    return this.getValuePerPrecentage(this.percentage, farAsPossible);
+    let blocked = this.blockedPerson;
+    let farthestRowTarget =
+      blocked && !blocked.atSeatRow()
+        ? this.position.row
+        : this.backPerson
+        ? this.target.row <= this.backPerson.position.row
+          ? this.backPerson.position.row + 1
+          : this.target.row
+        : this.target.row;
+    let steps = Math.abs(farthestRowTarget - this.position.row);
+    steps = Math.min(steps, this.ySpeed);
+    return this.getMaxStepsOfCurrPrecentage(steps, Speed.Y);
+    // return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   private getEnterXSteps(): number {
-    return this.getValuePerPrecentage(this.percentage, 1);
+    return this.getMaxStepsOfCurrPrecentage(this.xSpeed, Speed.X);
+    // return this.getValuePerPrecentage(this.percentage, 1);
+  }
+  //return true if this person at his seat row but not in the aisle
+  atSeatRow(): boolean {
+    let { row, column } = this.position;
+    return row === this.ticket.row && column !== this.centerPlaneCol;
   }
 
   private getLeaveXSteps(): number {
     const isOneStep = (first: Position, second: Position): boolean => {
-      return Math.abs(first.column - second.column) === 1;
+      return (
+        first.row === second.row && Math.abs(first.column - second.column) === 1
+      );
     };
     let blocker = isOneStep(this.blockedPerson.position, this.position)
       ? this.blockedPerson
@@ -209,13 +238,15 @@ export default class Person implements IPerson {
         ? 1
         : 0
       : 1;
-    return this.getValuePerPrecentage(this.percentage, step);
+    return this.getMaxStepsOfCurrPrecentage(step, Speed.X);
+    // return this.getValuePerPrecentage(this.percentage, step);
   }
   //return true if direction = backward and backPerson
   //block this from step steps back in current iteration
   isBackBlocked(steps: number, newPosition: Position): boolean {
     return (
       this.direction === Direction.BACKWARD &&
+      this.backPerson &&
       newPosition.row === this.backPerson.position.row + 1 &&
       !isEqualPos(this.target, newPosition)
     );
@@ -251,17 +282,17 @@ export default class Person implements IPerson {
       aisleSteps,
       this.direction
     );
-    let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
-    if (backBlock)
-      this.askOtherToChangeTarget(
-        this.backPerson,
-        this.newPositionByDir(1, Direction.BACKWARD)
-      );
+    // let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
+    // if (backBlock)
+    //   this.askOtherToChangeTarget(
+    //     this.backPerson,
+    //     this.newPositionByDir(1, Direction.BACKWARD)
+    //   );
     this.decreasePercentageBy(
       this.precentagePerSpeedValue(aisleSteps, Speed.Y)
     );
     this.position = newPosition;
-    if (this.atTarget()) this.backToSeat();
+    if (this.atTarget()) this.backToSeat(); //consumePresentage if has call to walk again
 
     return this.position.row === this.ticket.row;
   }
@@ -287,14 +318,17 @@ export default class Person implements IPerson {
     let newDir: Direction;
     let centerPos: Position = this.position;
     let target: Position = this.target;
-    if (centerPos.row < target.row && centerPos.column === target.column) {
+    if (centerPos.row < target.row && centerPos.column === target.column)
       newDir = Direction.FORWARD;
-      this.setBlockedPerson(null);
-    } else if (centerPos.row > target.row && centerPos.column === target.column)
+    else if (centerPos.row > target.row && centerPos.column === target.column)
       newDir = Direction.BACKWARD;
-    else if (centerPos.row === target.row && centerPos.column !== target.column)
+    else if (
+      centerPos.row === target.row &&
+      centerPos.column !== target.column
+    ) {
       newDir = Direction.ENTER;
-    else {
+      this.setBlockedPerson(null);
+    } else {
       // console.log("PERSON", this);
       throw "This Person is not in the middle of his seat ticket aisle";
     }

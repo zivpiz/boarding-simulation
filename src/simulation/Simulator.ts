@@ -82,17 +82,18 @@ export class Simulator implements ISimulator {
   //this function handle the case of person in the aisle and in his ticket row number
   private handlePersonInHisRowButInAisle(person) {
     let isPersonBlocked = this.isPersonBlockedInRow(person);
-    if (isPersonBlocked) {
+    if (isPersonBlocked && person.getDirection() !== Direction.LEAVE) {
       this.notifyAllSittingBlockersOfPerson(person);
     }
     if (person.hasMoreLuggage()) {
       person.putLuggage();
     }
-    if (isPersonBlocked && !person.hasMoreLuggage()) { //person needs to walk one step back
+    if (isPersonBlocked && !person.hasMoreLuggage()) {
+      //person needs to walk one step back
       if (person.getDirection() != Direction.BACKWARD) {
         this.tellPersonToWalkOneStepBack(person);
       }
-      this.walkInAilse(person);
+      if (person.canMakeStep()) this.walkInAilse(person);
     }
     if (!isPersonBlocked && !person.hasMoreLuggage()) {
       //person finished with his luggage and no one blocks him.
@@ -154,7 +155,9 @@ export class Simulator implements ISimulator {
   }
 
   private isPersonBlockedInRow(person: IPerson): boolean {
-    return this.inactivePersons.isPersonBlocked(person);
+    let sittings = this.inactivePersons.isPersonBlocked(person);
+    let actives = this.activePersons.isPersonBlocked(person);
+    return sittings || actives;
   }
 
   private isPersonInAisle(person: IPerson): boolean {
@@ -166,11 +169,22 @@ export class Simulator implements ISimulator {
     this.inactivePersons.add(person);
   }
 
+  private getAllBlockersOfPerson(person: IPerson): Array<IPerson> {
+    const mult = person.ticket.column > person.position.column ? 1 : -1;
+    let sittings = this.inactivePersons.getAllBlockersOfPerson(person);
+    let actives = this.activePersons.getAllBlockersOfPerson(person);
+    return sittings.concat(actives).sort((a: IPerson, b: IPerson) => {
+      return (a.getPosition().column - b.getPosition().column) * mult;
+    });
+  }
+
+  private addToActiveBefore(toAdd: IPerson, before: IPerson): void {
+    this.inactivePersons.remove(toAdd);
+    this.activePersons.addToQueueBefore(toAdd, before);
+  }
   //tell the blockers in the row to empty the row.
   private notifyAllSittingBlockersOfPerson(person: IPerson) {
-    let blockers: Array<IPerson> = this.inactivePersons.getAllBlockersOfPerson(
-      person
-    );
+    let blockers: Array<IPerson> = this.getAllBlockersOfPerson(person);
     let numOfBlockers: number = blockers.length;
     let rowNumber: number = blockers[0].getPosition().row;
     let aisleColumnNum: number = this.plane.getCenter();
@@ -178,7 +192,7 @@ export class Simulator implements ISimulator {
       let blocker: IPerson = blockers[i];
       blocker.setTarget({ column: aisleColumnNum, row: rowNumber + i + 1 });
       blocker.setBlockedPerson(person);
-      this.activePersons.addToQueueBefore(blocker, person);
+      this.addToActiveBefore(blocker, person);
     }
   }
 

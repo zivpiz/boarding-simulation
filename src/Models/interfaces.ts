@@ -22,6 +22,7 @@ export interface IPerson {
   blockedPerson: IPerson; //the person who blocked by me in the row
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
+  centerPlaneCol: number;
 
   setFrontPerson(person: IPerson): void;
   setBackPerson(person: IPerson): void;
@@ -44,6 +45,7 @@ export interface IPerson {
   hasMoreLuggage(): boolean;
 
   initPercentage(): void;
+  consumePrecentage(): void;
   decreasePercentageBy(precentage: number): void;
   //put Speed.LUGGAGE in storage if atSeatAisle
   //depend on precentage
@@ -59,6 +61,8 @@ export interface IPerson {
   atTarget(): boolean;
   //return true if this person at his seat aisle
   atSeatAisle(): boolean;
+  //return true if this person at his seat row but not in the aisle
+  atSeatRow(): boolean;
   //return true if direction = backward and backPerson
   //block this from step steps back
   isBackBlocked(steps: number, newPosition: Position): boolean;
@@ -96,6 +100,8 @@ export interface IActivePersonsQueue {
   getQueueAsArray(): Array<IPerson>;
   addToQueueBefore(personToAdd: IPerson, before: IPerson);
   remove(personToRemove: IPerson);
+  isPersonBlocked(person: IPerson): boolean;
+  getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
   forEach(lambda: (element: IPerson) => void);
 }
 
