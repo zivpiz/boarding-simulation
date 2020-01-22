@@ -143,4 +143,5 @@ export interface ISimulator {
   //iterations++
   //returns iterations
   simulate(): number;
+  toSnapshot(): void;
 }

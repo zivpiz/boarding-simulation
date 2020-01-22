@@ -23,7 +23,12 @@ export const runSimulation = (
   passengers.boardingBy(seatingMode);
   const boardingQueue = new ActivePersonsQueue(passengers.getPassengers());
 
-  const simulator = new Simulator(plane, boardingQueue);
+  const snapshot = createSnapshot(
+    numberOfRows,
+    spaceBetweenRows + 2 * numberOfSeatsInHalfRow
+  );
+
+  const simulator = new Simulator(plane, boardingQueue, snapshot);
   return simulator.simulate();
 };
 
@@ -70,4 +75,16 @@ export const findBestSeatingMode = (
   // });
 
   // return _.sortBy(modes, "result");
+};
+
+export const createSnapshot = (rows, columns) => {
+  let snapshot = new Array(rows)
+    .fill("garbage")
+    .map((_, row) =>
+      new Array(columns)
+        .fill("garbage")
+        .map((_, col) => ({ row, column: col, person: null }))
+    );
+
+  return snapshot;
 };

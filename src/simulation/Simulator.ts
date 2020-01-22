@@ -50,21 +50,25 @@ export class Simulator implements ISimulator {
   private activePersons: IActivePersonsQueue;
   private inactivePersons: IInactivePersonsSet;
   private iterations: number;
+  private snapshot: any;
 
-  constructor(plane: IPlane, queue: IActivePersonsQueue) {
+  constructor(plane: IPlane, queue: IActivePersonsQueue, snapshot: any) {
     this.plane = plane;
     this.activePersons = queue;
     this.inactivePersons = new InactivePersonsSet();
     this.iterations = 0;
+    this.snapshot = snapshot;
   }
 
   simulate(): number {
-    this.debugg()
+    // this.debugg();
     while (this.activePersons.length > 0) {
       //while there is someone who is not sitting
       this.iterations++;
 
       this.activePersons.forEach((person: IPerson) => {
+        this.toSnapshot();
+
         person.initPercentage();
 
         if (person.atSeatAisle() && this.isPersonInAisle(person)) {
@@ -76,39 +80,48 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
+        this.toSnapshot();
       });
     }
     return this.iterations;
   }
 
-  private debugg() {
-    this.printCurrentPositions()
-    const positionsList = this.activePersons.getQueueAsArray().map(person => person.getPosition())
-    positionsList.forEach((position, currIndex) =>{
-      if(_.slice(positionsList, currIndex + 1).find(position2 => _.isEqual(position2, position))){
-        throw Error("Same positions!~!")
-
-      }
-    })
-  }
+  // private debugg() {
+  //   this.printCurrentPositions();
+  //   const positionsList = this.activePersons
+  //     .getQueueAsArray()
+  //     .map(person => person.getPosition());
+  //   positionsList.forEach((position, currIndex) => {
+  //     if (
+  //       _.slice(positionsList, currIndex + 1).find(position2 =>
+  //         _.isEqual(position2, position)
+  //       )
+  //     ) {
+  //       throw Error("Same positions!~!");
+  //     }
+  //   });
+  // }
   private printCurrentPositions() {
-    this.inactivePersons.forEach(person =>{
-      console.log(`inactive person ${person.id} position`, person.getPosition())
-      console.log(`inactive person ${person.id} ticket`, person.getTicket())
-      console.log(`inactive person ${person.id} target`, person.getTarget())
-      console.log('')
-    })
-    this.activePersons.forEach(person =>{
-      console.log(`active person ${person.id} position`, person.getPosition())
-      console.log(`active person ${person.id} ticket`, person.getTicket())
-      console.log(`active person ${person.id} target`, person.getTarget())
-      console.log('')
-    })
+    //   this.inactivePersons.forEach(person => {
+    //     console.log(
+    //       `inactive person ${person.id} position`,
+    //       person.getPosition()
+    //     );
+    //     console.log(`inactive person ${person.id} ticket`, person.getTicket());
+    //     console.log(`inactive person ${person.id} target`, person.getTarget());
+    //     console.log("");
+    //   });
+    //   this.activePersons.forEach(person => {
+    //     console.log(`active person ${person.id} position`, person.getPosition());
+    //     console.log(`active person ${person.id} ticket`, person.getTicket());
+    //     console.log(`active person ${person.id} target`, person.getTarget());
+    //     console.log("");
+    //   });
   }
 
   //this function handle the case of person in the aisle and in his ticket row number
   private handlePersonInHisRowButInAisle(person) {
-    this.debugg()
+    // this.debugg();
 
     let isPersonBlocked = this.isPersonBlockedInRow(person);
     if (isPersonBlocked && person.getDirection() !== Direction.LEAVE) {
@@ -251,5 +264,80 @@ export class Simulator implements ISimulator {
   }
   getIterations(): number {
     return this.iterations;
+  }
+
+  cleanSnapshot() {
+    for (let i = 0; i < this.snapshot.length; i++) {
+      for (let j = 0; j < this.snapshot[0].length; j++) {
+        this.snapshot[i][j] = { row: i, column: j, person: null };
+      }
+    }
+  }
+
+  toSnapshot() {
+    let outsideGuys = [];
+
+    this.cleanSnapshot();
+    this.activePersons.forEach(person => {
+      const position = person.getPosition();
+      if (
+        position.row >= 0 &&
+        position.column >= 0 &&
+        position.row < this.snapshot.length &&
+        position.column < this.snapshot[0].length
+      ) {
+        if (
+          this.snapshot[position.row][position.column].person !== null &&
+          this.snapshot[position.row][position.column].person !== person.id
+        ) {
+          this.snapshot[position.row][position.column].otherPerson = person.id;
+        } else {
+          this.snapshot[position.row][position.column].person = person.id;
+        }
+      } else {
+        outsideGuys.push(
+          `${person.id} <${person.position.row}, ${person.position.column}> [${person.target.row}, ${person.target.column}]`
+        );
+      }
+    });
+
+    this.inactivePersons.forEach(person => {
+      const position = person.getPosition();
+      if (
+        position.row >= 0 &&
+        position.column >= 0 &&
+        position.row < this.snapshot.length &&
+        position.column < this.snapshot[0].length
+      ) {
+        if (
+          this.snapshot[position.row][position.column].person !== null &&
+          this.snapshot[position.row][position.column].person !== person.id
+        ) {
+          this.snapshot[position.row][position.column].otherPerson = person.id;
+        } else {
+          this.snapshot[position.row][position.column].person = person.id;
+        }
+      } else {
+        outsideGuys.push(
+          `${person.id} <${person.position.row}, ${person.position.column}> [${person.target.row}, ${person.target.column}]`
+        );
+      }
+    });
+
+    let iterateSnap = this.snapshot.reduce(
+      (acc, curr) =>
+        `${acc}\n${curr
+          .map(
+            ({ row, column, person, otherPerson }) =>
+              `<${row},${column}> [${person !== null ? person : " "}] ${
+                otherPerson ? `[${otherPerson}]` : ""
+              }`
+          )
+          .join("\t")}`,
+      ""
+    );
+
+    console.log(iterateSnap);
+    console.log(`OUTSIDE: ` + outsideGuys.join("\t"));
   }
 }
