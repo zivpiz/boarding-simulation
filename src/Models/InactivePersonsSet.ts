@@ -21,8 +21,14 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     let blockers = passengers.filter((sittingPerson: IPerson) => {
       let sittingRow = sittingPerson.getPosition().row;
       let sittingColumn = sittingPerson.getPosition().column;
-      let rightBlock = ticketColumn > column && sittingColumn > column && sittingColumn < ticketColumn;
-      let leftBlock = ticketColumn < column && sittingColumn < column && sittingColumn > ticketColumn;
+      let rightBlock =
+        ticketColumn > column &&
+        sittingColumn > column &&
+        sittingColumn < ticketColumn;
+      let leftBlock =
+        ticketColumn < column &&
+        sittingColumn < column &&
+        sittingColumn > ticketColumn;
       return sittingRow === row && (rightBlock || leftBlock);
     });
     const mult = ticketColumn > column ? 1 : -1;
@@ -38,8 +44,14 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     return Array.from(this.passengers).some((sittingPerson: IPerson) => {
       let sittingRow = sittingPerson.getPosition().row;
       let sittingColumn = sittingPerson.getPosition().column;
-      let rightBlock = ticketColumn > column && sittingColumn > column && sittingColumn < ticketColumn;
-      let leftBlock = ticketColumn < column && sittingColumn < column && sittingColumn > ticketColumn;
+      let rightBlock =
+        ticketColumn > column &&
+        sittingColumn > column &&
+        sittingColumn < ticketColumn;
+      let leftBlock =
+        ticketColumn < column &&
+        sittingColumn < column &&
+        sittingColumn > ticketColumn;
       return sittingRow === row && (rightBlock || leftBlock);
     });
   }
@@ -54,5 +66,17 @@ export class InactivePersonsSet implements IInactivePersonsSet {
 
   forEach(lambda: (element: IPerson) => void) {
     this.passengers.forEach(lambda);
+  }
+
+  print() {
+    let printedPassengers = [];
+    this.passengers.forEach(({ id, ticket, target }, _p, _) =>
+      printedPassengers.push(
+        `[${id}] position {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
+      )
+    );
+
+    console.log(`ActivePassengersQueue:`);
+    console.log(printedPassengers.join("\n"));
   }
 }

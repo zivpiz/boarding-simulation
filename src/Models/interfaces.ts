@@ -104,6 +104,7 @@ export interface IActivePersonsQueue {
   isPersonBlocked(person: IPerson): boolean;
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
   forEach(lambda: (element: IPerson) => void);
+  print: () => void;
 }
 
 export interface IInactivePersonsSet {
@@ -115,6 +116,7 @@ export interface IInactivePersonsSet {
   add(person: IPerson);
   remove(person: IPerson);
   forEach(lambda: (element: IPerson) => void);
+  print: () => void;
 }
 
 export interface IPassengers {

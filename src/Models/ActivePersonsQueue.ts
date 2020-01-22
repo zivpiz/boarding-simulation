@@ -101,4 +101,16 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
   private getPersonIndex(person: IPerson) {
     return this.passengers.findIndex(element => element === person);
   }
+
+  print() {
+    let printedPassengers = [];
+    this.passengers.forEach(({ id, ticket, target }, _p, _) =>
+      printedPassengers.push(
+        `[${id}] ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
+      )
+    );
+
+    console.log(`ActivePassengersQueue:`);
+    console.log(printedPassengers.join("\n"));
+  }
 }

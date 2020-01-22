@@ -327,17 +327,23 @@ export class Simulator implements ISimulator {
     let iterateSnap = this.snapshot.reduce(
       (acc, curr) =>
         `${acc}\n${curr
-          .map(
-            ({ row, column, person, otherPerson }) =>
-              `<${row},${column}> [${person !== null ? person : " "}] ${
-                otherPerson ? `[${otherPerson}]` : ""
-              }`
-          )
+          .map(({ row, column, person, otherPerson }) => {
+            const isLegalRow =
+              column === this.plane.centerColumn ||
+              row % (this.plane.spaceBetweenRows + 1) === 0;
+
+            return isLegalRow
+              ? `<${row},${column}> [${person !== null ? person : " "}] ${
+                  otherPerson ? `[${otherPerson}]` : ""
+                }`
+              : "        ";
+          })
           .join("\t")}`,
       ""
     );
 
     console.log(iterateSnap);
-    console.log(`OUTSIDE: ` + outsideGuys.join("\t"));
+    console.log(this.activePersons.print());
+    console.log(this.inactivePersons.print());
   }
 }

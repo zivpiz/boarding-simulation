@@ -24,8 +24,8 @@ export const runSimulation = (
   const boardingQueue = new ActivePersonsQueue(passengers.getPassengers());
 
   const snapshot = createSnapshot(
-    numberOfRows,
-    spaceBetweenRows + 2 * numberOfSeatsInHalfRow
+    (numberOfRows + 1) * spaceBetweenRows + numberOfRows,
+    1 + 2 * numberOfSeatsInHalfRow
   );
 
   const simulator = new Simulator(plane, boardingQueue, snapshot);
