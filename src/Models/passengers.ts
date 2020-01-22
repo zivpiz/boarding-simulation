@@ -37,6 +37,17 @@ export default class Passengers implements IPassengers {
     return persons;
   }
 
+  private initPositions(passengers: Array<Person>): Array<Person> {
+    for (let i = 0; i < passengers.length; i++) {
+      passengers[i].setPosition({
+        row: i == 0 ? 0 : -1 * i,
+        column: this.plane.getCenter()
+      });
+    }
+    this.passengers = passengers;
+    return this.passengers;
+  }
+
   setPassengersTargetToTicket(passengers: Array<Person>): Array<Person> {
     passengers.forEach(p => p.setTarget(p.ticket));
     return this.passengers;
@@ -67,20 +78,22 @@ export default class Passengers implements IPassengers {
   //set Persons frontPerson and BackPerson by mode
   boardingBy(mode: SeatingMode): Array<Person> {
     let asile = this.plane.getCenter();
+    let passengers;
     switch (mode) {
       case SeatingMode.RANDOM:
-        return seatingMethods.random(asile, this.passengers);
+        passengers = seatingMethods.random(asile, this.passengers);
       case SeatingMode.WINDOW_TO_AISLE:
-        return seatingMethods.windowToAisle(asile, this.passengers);
+        passengers = seatingMethods.windowToAisle(asile, this.passengers);
       case SeatingMode.AISLE_TO_WINDOW:
-        return seatingMethods.aisleToWindow(asile, this.passengers);
+        passengers = seatingMethods.aisleToWindow(asile, this.passengers);
       case SeatingMode.BACK_TO_FRONT:
-        return seatingMethods.backToFront(asile, this.passengers);
+        passengers = seatingMethods.backToFront(asile, this.passengers);
       case SeatingMode.FRONT_TO_BACK:
-        return seatingMethods.frontToBack(asile, this.passengers);
+        passengers = seatingMethods.frontToBack(asile, this.passengers);
       default:
-        return seatingMethods.random(asile, this.passengers);
+        passengers = seatingMethods.random(asile, this.passengers);
     }
+    return this.initPositions(passengers);
   }
 
   // for example - composeSeatingMode(random, windowToAisle)(plane, passengers)

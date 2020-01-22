@@ -6,8 +6,8 @@ const numberOfSeatsInHalfRow = 3;
 
 // If number of passengers is larger than the capacity of the plane - the plane fills up
 const numberOfPassengers = 2;
-const seatingMode: SeatingMode = SeatingMode.RANDOM;
-const ticketingMode: TicketAssignmetMode = TicketAssignmetMode.BACK_TO_FRONT;
+const seatingMode: SeatingMode = SeatingMode.WINDOW_TO_AISLE;
+const ticketingMode: TicketAssignmetMode = TicketAssignmetMode.FRONT_TO_BACK;
 
 export default {
   numberOfRows,

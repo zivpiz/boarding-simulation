@@ -200,15 +200,14 @@ export default class Person implements IPerson {
   //depend on this position, target, backPerson and ySpeed
   //and precentage
   private getBackwardYSteps(): number {
-    let blocked = this.blockedPerson;
-    let farthestRowTarget =
-      blocked && !blocked.atSeatRow()
-        ? this.position.row
-        : this.backPerson
-        ? this.target.row <= this.backPerson.position.row
-          ? this.backPerson.position.row + 1
-          : this.target.row
-        : this.target.row;
+    let blockedArrive = this.blockedPerson && !this.blockedPerson.atSeatRow();
+    let farthestRowTarget = blockedArrive
+      ? this.position.row
+      : this.backPerson
+      ? this.target.row <= this.backPerson.position.row
+        ? this.backPerson.position.row + 1
+        : this.target.row
+      : this.target.row;
     let steps = Math.abs(farthestRowTarget - this.position.row);
     steps = Math.min(steps, this.ySpeed);
     return this.getMaxStepsOfCurrPrecentage(steps, Speed.Y);

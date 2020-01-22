@@ -107,12 +107,32 @@ export class Simulator implements ISimulator {
         person.getDirection() === Direction.BACKWARD
       ) {
         //person in his way out (trying to empty the row)
+        this.backToAisleSetPointers(person);
         this.walkInAilse(person);
       } else {
         //person in his way in
         this.personGetsIntoHisRow(person);
       }
     }
+  }
+
+  private backToAisleSetPointers(person: IPerson): void {
+    let actives = this.activePersons.getQueueAsArray();
+    let frontPerson = actives.filter(
+      p =>
+        p.position.column === this.plane.getCenter() &&
+        p.position.row > person.position.row
+    )[0];
+    let backPerson = actives
+      .filter(
+        p =>
+          p.position.column === this.plane.getCenter() &&
+          p.position.row < person.position.row
+      )
+      .reverse()[0];
+
+    person.setFrontPerson(frontPerson);
+    person.setBackPerson(backPerson);
   }
 
   private walkInAilse(person: IPerson) {
@@ -126,11 +146,10 @@ export class Simulator implements ISimulator {
   private walkInRow(person: IPerson): boolean {
     let arrivedHisSeat = person.rowStep();
     if (arrivedHisSeat) {
-      this.activePersons.remove(person);
-      this.inactivePersons.add(person);
-    } else if (this.isPersonInAisle(person) && person.canMakeStep()) {
+      this.changePersonToBeInactive(person);
+    } else if (this.isPersonInAisle(person)) {
       person.updateDirectionAccordinToTarget();
-      this.handlePersonInHisRowButInAisle(person);
+      if (person.canMakeStep()) this.handlePersonInHisRowButInAisle(person);
     }
     return this.isPersonInAisle(person);
   }
@@ -144,6 +163,8 @@ export class Simulator implements ISimulator {
         frontPerson.setBackPerson(backPerson);
       } else if (frontPerson) frontPerson.setBackPerson(null);
       else if (backPerson) backPerson.setFrontPerson(null);
+      person.setFrontPerson(null);
+      person.setBackPerson(null);
     }
   }
 
