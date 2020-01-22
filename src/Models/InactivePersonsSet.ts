@@ -21,10 +21,9 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     let blockers = passengers.filter((sittingPerson: IPerson) => {
       let sittingRow = sittingPerson.getPosition().row;
       let sittingColumn = sittingPerson.getPosition().column;
-      let isOther = sittingPerson !== person;
-      let rightBlock = ticketColumn > column && sittingColumn < ticketColumn;
-      let leftBlock = ticketColumn < column && sittingColumn > ticketColumn;
-      return isOther && sittingRow === row && (rightBlock || leftBlock);
+      let rightBlock = ticketColumn > column && sittingColumn > column && sittingColumn < ticketColumn;
+      let leftBlock = ticketColumn < column && sittingColumn < column && sittingColumn > ticketColumn;
+      return sittingRow === row && (rightBlock || leftBlock);
     });
     const mult = ticketColumn > column ? 1 : -1;
     blockers.sort((a: IPerson, b: IPerson) => {
@@ -39,13 +38,9 @@ export class InactivePersonsSet implements IInactivePersonsSet {
     return Array.from(this.passengers).some((sittingPerson: IPerson) => {
       let sittingRow = sittingPerson.getPosition().row;
       let sittingColumn = sittingPerson.getPosition().column;
-      let isOther = sittingPerson !== person;
-      let rightBlock = ticketColumn > column && sittingColumn < ticketColumn;
-      let leaverBlock =
-        sittingColumn === ticketColumn &&
-        person.getDirection() === Direction.LEAVE;
-      let leftBlock = ticketColumn < column && sittingColumn > ticketColumn;
-      return isOther && sittingRow === row && (rightBlock || leftBlock);
+      let rightBlock = ticketColumn > column && sittingColumn > column && sittingColumn < ticketColumn;
+      let leftBlock = ticketColumn < column && sittingColumn < column && sittingColumn > ticketColumn;
+      return sittingRow === row && (rightBlock || leftBlock);
     });
   }
 
