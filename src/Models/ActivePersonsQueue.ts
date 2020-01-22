@@ -104,9 +104,9 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
 
   print() {
     let printedPassengers = [];
-    this.passengers.forEach(({ id, ticket, target }, _p, _) =>
+    this.passengers.forEach(({ id, position, ticket, target }, _p, _) =>
       printedPassengers.push(
-        `[${id}] ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
+        `[${id}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
       )
     );
 

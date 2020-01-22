@@ -330,7 +330,9 @@ export class Simulator implements ISimulator {
           .map(({ row, column, person, otherPerson }) => {
             const isLegalRow =
               column === this.plane.centerColumn ||
-              row % (this.plane.spaceBetweenRows + 1) === 0;
+              (row !== 0 &&
+                row <= this.plane.rows &&
+                row % this.plane.spaceBetweenRows === 0);
 
             return isLegalRow
               ? `<${row},${column}> [${person !== null ? person : " "}] ${
