@@ -65,10 +65,9 @@ export class Simulator implements ISimulator {
     while (this.activePersons.length > 0) {
       //while there is someone who is not sitting
       this.iterations++;
+      this.toSnapshot();
 
       this.activePersons.forEach((person: IPerson) => {
-        this.toSnapshot();
-
         person.initPercentage();
 
         if (person.atSeatAisle() && this.isPersonInAisle(person)) {
@@ -80,7 +79,6 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
-        this.toSnapshot();
       });
     }
     return this.iterations;
