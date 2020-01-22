@@ -37,6 +37,9 @@ export default class Person implements IPerson {
   getTicket(): Position {
     return this.ticket;
   }
+  getTarget(): Position {
+    return this.target;
+  }
   getPosition(): Position {
     return this.position;
   }

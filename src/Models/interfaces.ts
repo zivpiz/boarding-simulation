@@ -33,6 +33,7 @@ export interface IPerson {
   setBlockedPerson(person: IPerson): void;
 
   getTicket(): Position;
+  getTarget(): Position;
   getPosition(): Position;
   getDirection(): Direction;
   getLuggageCount(): number;
