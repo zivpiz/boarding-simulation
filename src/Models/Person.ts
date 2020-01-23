@@ -189,7 +189,7 @@ export default class Person implements IPerson {
     let farthestRowTarget = this.frontPerson
       ? this.target.row >= this.frontPerson.position.row
         ? this.frontPerson.atSeatAisle() &&
-          this.frontPerson.direction !== Direction.LEAVE
+          this.frontPerson.getBlockedPerson() !== this
           ? this.frontPerson.position.row - 2
           : this.frontPerson.position.row - 1
         : this.target.row
@@ -206,7 +206,7 @@ export default class Person implements IPerson {
     let blockedArrive = this.blockedPerson && !this.blockedPerson.atSeatRow();
     let farthestRowTarget = blockedArrive
       ? this.position.row
-      : this.backPerson
+      : this.backPerson && this.backPerson !== this.blockedPerson
       ? this.target.row <= this.backPerson.position.row
         ? this.backPerson.position.row + 1
         : this.target.row

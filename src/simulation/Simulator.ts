@@ -119,8 +119,6 @@ export class Simulator implements ISimulator {
 
   //this function handle the case of person in the aisle and in his ticket row number
   private handlePersonInHisRowButInAisle(person) {
-    // this.debugg();
-
     let isPersonBlocked = this.isPersonBlockedInRow(person);
     if (isPersonBlocked && person.getDirection() !== Direction.LEAVE) {
       this.notifyAllSittingBlockersOfPerson(person);

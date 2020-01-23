@@ -70,13 +70,28 @@ export class InactivePersonsSet implements IInactivePersonsSet {
 
   print() {
     let printedPassengers = [];
-    this.passengers.forEach(({ id, position, ticket, target }, _p, _) =>
-      printedPassengers.push(
-        `[${id}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
-      )
+    this.passengers.forEach(
+      (
+        {
+          id,
+          position,
+          ticket,
+          target,
+          luggageCount,
+          xSpeed,
+          ySpeed,
+          luggageDelay
+        },
+        _p,
+        _
+      ) =>
+        printedPassengers.push(
+          `[${id}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}} luggage: ${luggageCount}
+        xSpeed: ${xSpeed} ySpeed: ${ySpeed} luggageDelay: ${luggageDelay}`
+        )
     );
 
-    console.log(`ActivePassengersQueue:`);
+    console.log(`InActivePassengersQueue:`);
     console.log(printedPassengers.join("\n"));
   }
 }

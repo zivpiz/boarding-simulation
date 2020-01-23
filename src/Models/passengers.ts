@@ -82,16 +82,22 @@ export default class Passengers implements IPassengers {
     switch (mode) {
       case SeatingMode.RANDOM:
         passengers = seatingMethods.random(asile, this.passengers);
+        break;
       case SeatingMode.WINDOW_TO_AISLE:
         passengers = seatingMethods.windowToAisle(asile, this.passengers);
+        break;
       case SeatingMode.AISLE_TO_WINDOW:
         passengers = seatingMethods.aisleToWindow(asile, this.passengers);
+        break;
       case SeatingMode.BACK_TO_FRONT:
         passengers = seatingMethods.backToFront(asile, this.passengers);
+        break;
       case SeatingMode.FRONT_TO_BACK:
         passengers = seatingMethods.frontToBack(asile, this.passengers);
+        break;
       default:
         passengers = seatingMethods.random(asile, this.passengers);
+        break;
     }
     return this.initPositions(passengers);
   }

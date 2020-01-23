@@ -56,16 +56,23 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
     const { row, column } = person.getPosition();
     const ticketColumn = person.getTicket().column;
     return Array.from(this.passengers).some((activePerson: IPerson) => {
-      let activeRow = activePerson.getPosition().row;
-      let activeColumn = activePerson.getPosition().column;
+      let activePos = activePerson.getPosition();
+      let activeTarget = activePerson.getTarget();
+      let isActiveLeave = activePerson.getDirection() === Direction.LEAVE;
       let isOther = activePerson !== person;
-      let rightBlock = ticketColumn > column && activeColumn < ticketColumn;
-      let leaverBlock =
-        activeColumn === ticketColumn &&
-        person.getDirection() === Direction.LEAVE;
-      let leftBlock = ticketColumn < column && activeColumn > ticketColumn;
+      let rightBlock =
+        ticketColumn > column &&
+        activePos.column < ticketColumn &&
+        activeTarget.column < ticketColumn;
+      let leaverBlock = activePos.column === ticketColumn && isActiveLeave;
+      let leftBlock =
+        ticketColumn < column &&
+        activePos.column > ticketColumn &&
+        activeTarget.column > ticketColumn;
       return (
-        isOther && activeRow === row && (rightBlock || leaverBlock || leftBlock)
+        isOther &&
+        activePos.row === row &&
+        (rightBlock || leaverBlock || leftBlock)
       );
     });
   }
@@ -75,16 +82,23 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
     const { row, column } = person.getPosition();
     const ticketColumn = person.getTicket().column;
     blockers = this.passengers.filter((activePerson: IPerson) => {
-      let activeRow = activePerson.getPosition().row;
-      let activeColumn = activePerson.getPosition().column;
+      let activePos = activePerson.getPosition();
+      let activeTarget = activePerson.getTarget();
+      let isActiveLeave = activePerson.getDirection() === Direction.LEAVE;
       let isOther = activePerson !== person;
-      let rightBlock = ticketColumn > column && activeColumn < ticketColumn;
-      let leaverBlock =
-        activeColumn === ticketColumn &&
-        person.getDirection() === Direction.LEAVE;
-      let leftBlock = ticketColumn < column && activeColumn > ticketColumn;
+      let rightBlock =
+        ticketColumn > column &&
+        activePos.column < ticketColumn &&
+        activeTarget.column < ticketColumn;
+      let leaverBlock = activePos.column === ticketColumn && isActiveLeave;
+      let leftBlock =
+        ticketColumn < column &&
+        activePos.column > ticketColumn &&
+        activeTarget.column > ticketColumn;
       return (
-        isOther && activeRow === row && (rightBlock || leaverBlock || leftBlock)
+        isOther &&
+        activePos.row === row &&
+        (rightBlock || leaverBlock || leftBlock)
       );
     });
     const mult = ticketColumn > column ? 1 : -1;
@@ -104,10 +118,25 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
 
   print() {
     let printedPassengers = [];
-    this.passengers.forEach(({ id, position, ticket, target }, _p, _) =>
-      printedPassengers.push(
-        `[${id}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}}`
-      )
+    this.passengers.forEach(
+      (
+        {
+          id,
+          position,
+          ticket,
+          target,
+          luggageCount,
+          ySpeed,
+          xSpeed,
+          luggageDelay
+        },
+        _p,
+        _
+      ) =>
+        printedPassengers.push(
+          `[${id}] position: {${position.row}, ${position.column}} ticket: {${ticket.row},${ticket.column}} target: {${target.row},${target.column}} luggage: ${luggageCount}
+        xSpeed: ${xSpeed} ySpeed: ${ySpeed} luggageDelay: ${luggageDelay}`
+        )
     );
 
     console.log(`ActivePassengersQueue:`);
