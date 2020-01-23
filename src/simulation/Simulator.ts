@@ -342,7 +342,7 @@ export class Simulator implements ISimulator {
     );
 
     console.log(iterateSnap);
-    console.log(this.activePersons.print());
-    console.log(this.inactivePersons.print());
+    this.activePersons.print();
+    this.inactivePersons.print();
   }
 }
