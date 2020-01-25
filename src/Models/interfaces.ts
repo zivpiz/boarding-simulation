@@ -5,7 +5,8 @@ import {
   Position,
   SeatingMode,
   TicketAssignmetMode,
-  Speed
+  Speed,
+  Emoji
 } from "./types";
 
 export interface IPerson {
@@ -23,6 +24,7 @@ export interface IPerson {
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
   centerPlaneCol: number;
+  emoji?: Emoji;
 
   setFrontPerson(person: IPerson): void;
   setBackPerson(person: IPerson): void;

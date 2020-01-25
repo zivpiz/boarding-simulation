@@ -8,6 +8,11 @@ export enum SeatingMode {
   BACK_TO_FRONT = "back_to_front"
 }
 
+export type Emoji = {
+  key: any;
+  emoji: any;
+};
+
 export type AisleBlock = {
   hasRows: boolean;
   rightRow: Array<Seat>;

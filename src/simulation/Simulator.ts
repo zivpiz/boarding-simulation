@@ -65,7 +65,7 @@ export class Simulator implements ISimulator {
     while (this.activePersons.length > 0) {
       //while there is someone who is not sitting
       this.iterations++;
-      this.toSnapshot();
+      // this.toSnapshot();
       let personsToIterate = this.activePersons.getQueueAsArray().slice(0);
       personsToIterate.forEach((person: IPerson) => {
         person.initPercentage();
@@ -189,7 +189,8 @@ export class Simulator implements ISimulator {
     let newPos = person.position;
     let isSamePos =
       oldPos.column === newPos.column && oldPos.row === newPos.row;
-    if (arrivedHisRow && !isSamePos) {
+    if (arrivedHisRow) {
+      // if (arrivedHisRow && !isSamePos) {
       this.handlePersonInHisRowButInAisle(person);
     }
   }
@@ -320,9 +321,11 @@ export class Simulator implements ISimulator {
           this.snapshot[position.row][position.column].person !== null &&
           this.snapshot[position.row][position.column].person !== person.id
         ) {
-          this.snapshot[position.row][position.column].otherPerson = person.id;
+          this.snapshot[position.row][position.column].otherPerson =
+            person.emoji.emoji;
         } else {
-          this.snapshot[position.row][position.column].person = person.id;
+          this.snapshot[position.row][position.column].person =
+            person.emoji.emoji;
         }
       } else {
         outsideGuys.push(
@@ -343,9 +346,11 @@ export class Simulator implements ISimulator {
           this.snapshot[position.row][position.column].person !== null &&
           this.snapshot[position.row][position.column].person !== person.id
         ) {
-          this.snapshot[position.row][position.column].otherPerson = person.id;
+          this.snapshot[position.row][position.column].otherPerson =
+            person.emoji.emoji;
         } else {
-          this.snapshot[position.row][position.column].person = person.id;
+          this.snapshot[position.row][position.column].person =
+            person.emoji.emoji;
         }
       } else {
         outsideGuys.push(

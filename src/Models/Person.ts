@@ -1,6 +1,7 @@
-import { Position, Direction, Speed, isEqualPos } from "./types";
+import { Position, Direction, Speed, isEqualPos, Emoji } from "./types";
 import { generateRandomSpeed, generateRandomNatNumber } from "../utils";
 import { IPerson } from "./interfaces";
+const emoji = require("node-emoji");
 
 export default class Person implements IPerson {
   id: number;
@@ -17,8 +18,14 @@ export default class Person implements IPerson {
   direction: Direction; //person movement direction
   percentage: number; //the percentage this iteration left
   centerPlaneCol: number;
+  emoji?: Emoji;
 
-  constructor(spaceBetweenRows: number, position: Position, id: number) {
+  constructor(
+    spaceBetweenRows: number,
+    position: Position,
+    id: number,
+    emoji?: Emoji
+  ) {
     this.id = id;
     this.xSpeed = 1;
     this.ySpeed = generateRandomSpeed(Speed.Y, spaceBetweenRows * 2);
@@ -32,10 +39,18 @@ export default class Person implements IPerson {
     this.ticket = null;
     this.percentage = 0;
     this.centerPlaneCol = position.column;
+    this.emoji = emoji;
   }
 
-  static createTestPerson(spaceBetweenRows: number, position: Position, id: number, ticket, ySpeed, luggageDel) : IPerson{
-    let person = new Person(spaceBetweenRows, position, id);
+  static createTestPerson(
+    spaceBetweenRows: number,
+    position: Position,
+    id: number,
+    ticket,
+    ySpeed,
+    luggageDel
+  ): IPerson {
+    let person = new Person(spaceBetweenRows, position, id, emoji.random());
     person.ySpeed = ySpeed;
     person.luggageDelay = luggageDel;
     person.ticket = ticket;
@@ -252,16 +267,16 @@ export default class Person implements IPerson {
     let farthestRowTarget = !backPerson
       ? this.target.row
       : blockedPerson
-        ? !blockedPerson.atSeatRow()
-          ? blockedPerson.position.row >= backPerson.position.row
-            ? Math.max(this.target.row, blockedPerson.position.row + 1)
-            : this.position.row//Math.max(this.target.row, backPerson.position.row + 1)// backPerson.position.row < this.target.row
-              // ? blockedPerson.atSeatRow()
-              //   ? this.target.row
-              //   : Math.max(this.target.row, blockedPerson.position.row + 1)
-              // : backPerson.target.row + 1
-          : Math.max(this.target.row, backPerson.position.row + 1)
-        : Math.max(this.target.row, backPerson.position.row + 1)
+      ? !blockedPerson.atSeatRow()
+        ? blockedPerson.position.row >= backPerson.position.row
+          ? Math.max(this.target.row, blockedPerson.position.row + 1)
+          : this.position.row //Math.max(this.target.row, backPerson.position.row + 1)// backPerson.position.row < this.target.row
+        : // ? blockedPerson.atSeatRow()
+          //   ? this.target.row
+          //   : Math.max(this.target.row, blockedPerson.position.row + 1)
+          // : backPerson.target.row + 1
+          Math.max(this.target.row, backPerson.position.row + 1)
+      : Math.max(this.target.row, backPerson.position.row + 1);
 
     let steps = Math.abs(farthestRowTarget - this.position.row);
     steps = Math.min(steps, this.ySpeed);

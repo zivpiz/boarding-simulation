@@ -6,6 +6,8 @@ import * as R from "ramda";
 import Plane from "./Plane";
 import Person from "./Person";
 
+const emoji = require("node-emoji");
+
 export default class Passengers implements IPassengers {
   passengers: Array<Person>;
   plane: Plane;
@@ -17,7 +19,7 @@ export default class Passengers implements IPassengers {
     this.plane.initSeats();
     this.passengers = this.initPersons(plane, numOfPassengers);
   }
-  
+
   getPassengers() {
     return this.passengers;
   }
@@ -31,7 +33,8 @@ export default class Passengers implements IPassengers {
           row: i == 0 ? 0 : -1 * i,
           column: plane.getCenter()
         },
-        i
+        i,
+        emoji.random()
       );
     }
     return persons;

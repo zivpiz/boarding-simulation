@@ -1,5 +1,5 @@
 import { IActivePersonsQueue, IPerson } from "./interfaces";
-import { Direction, isEqualPos, Position } from './types';
+import { Direction, isEqualPos, Position } from "./types";
 
 export default class ActivePersonsQueue implements IActivePersonsQueue {
   private passengers: IPerson[];
@@ -137,13 +137,14 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
           luggageCount,
           ySpeed,
           xSpeed,
-          luggageDelay
+          luggageDelay,
+          emoji
         },
         _p,
         _
       ) =>
         printedPassengers.push(
-          `[${id}] position: {${position.row}, ${position.column}} ticket: {${ticket.row},${ticket.column}} target: {${target.row},${target.column}} luggage: ${luggageCount}
+          `[${emoji.emoji}] position: {${position.row}, ${position.column}} ticket: {${ticket.row},${ticket.column}} target: {${target.row},${target.column}} luggage: ${luggageCount}
         xSpeed: ${xSpeed} ySpeed: ${ySpeed} luggageDelay: ${luggageDelay}`
         )
     );

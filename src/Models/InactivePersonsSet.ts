@@ -80,13 +80,14 @@ export class InactivePersonsSet implements IInactivePersonsSet {
           luggageCount,
           xSpeed,
           ySpeed,
-          luggageDelay
+          luggageDelay,
+          emoji
         },
         _p,
         _
       ) =>
         printedPassengers.push(
-          `[${id}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}} luggage: ${luggageCount}
+          `[${emoji.emoji}] position {${position.row}, ${position.column}} ticket {${ticket.row},${ticket.column}} target {${target.row},${target.column}} luggage: ${luggageCount}
         xSpeed: ${xSpeed} ySpeed: ${ySpeed} luggageDelay: ${luggageDelay}`
         )
     );

@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/zivpiz/boarding-simulation#readme",
   "dependencies": {
+    "@types/node": "^13.5.0",
     "lodash": "^4.17.15",
+    "node-emoji": "^1.10.0",
     "ramda": "^0.26.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
