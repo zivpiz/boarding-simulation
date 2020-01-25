@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { SeatingMode, TicketAssignmetMode } from "../Models/types";
 import Plane from "../Models/plane";
+import Person from "../Models/Person";
 import Passengers from "../Models/passengers";
 import ActivePersonsQueue from "../Models/ActivePersonsQueue";
 import { Simulator } from "./Simulator";
@@ -41,14 +42,16 @@ export const findBestSeatingMode = (
 ): Array<{
   ticketingMode: TicketAssignmetMode;
   seatingMode: SeatingMode;
+  passengers: number;
   result: number;
 }> => {
-  //Array of [{ticketingMode: __, seatingMode: __, result: __}, {ticketingMode: __, seatingMode: __, result: __}..]
+  //Array of [{ticketingMode: __, seatingMode: __, passengers: __, result: __}...]
   //for all seating modes
   const modes = Object.values(SeatingMode).map(seatingMode => {
     return {
       ticketingMode: ticketingMode,
       seatingMode: seatingMode,
+      passengers: numberOfPassengers,
       result: -1
     };
   });
@@ -64,6 +67,7 @@ export const findBestSeatingMode = (
   );
   return [modes[mode]];
   // modes.forEach(mode => {
+  //   console.log(mode);
   //   mode.result = runSimulation(
   //     numberOfRows,
   //     spaceBetweenRows,
@@ -88,3 +92,16 @@ export const createSnapshot = (rows, columns) => {
 
   return snapshot;
 };
+
+// export const getTestPassengers = (plane: Plane) {
+//   let positionById = (id: number) => {row: -id}
+//   const numOfPassengers = 8;
+//   let costumPersons = new Array<Person>([
+//     Person.createTestPerson(plane.spaceBetweenRows, )
+//   ])
+//   const passengers = new Passengers(plane, numOfPassengers);
+//   passengers.passengers = costumPersons;
+//   passengers.assignTicketsBy(ticketingMode);
+//   passengers.boardingBy(seatingMode);
+//   const boardingQueue = new ActivePersonsQueue(passengers.getPassengers());
+// }

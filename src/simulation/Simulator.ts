@@ -61,16 +61,16 @@ export class Simulator implements ISimulator {
   }
 
   simulate(): number {
-    // this.debugg();
+    // this.toSnapshot();
     while (this.activePersons.length > 0) {
       //while there is someone who is not sitting
       this.iterations++;
       this.toSnapshot();
-
-      this.activePersons.forEach((person: IPerson) => {
+      let personsToIterate = this.activePersons.getQueueAsArray().slice(0);
+      personsToIterate.forEach((person: IPerson) => {
         person.initPercentage();
 
-        if (person.atSeatAisle() && this.isPersonInAisle(person)) {
+        if (person.atSeatAisle()) {
           this.handlePersonInHisRowButInAisle(person);
         } else {
           if (this.isPersonInAisle(person)) {
@@ -79,8 +79,10 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
+        this.toSnapshot();
       });
     }
+    this.toSnapshot();
     return this.iterations;
   }
 
@@ -120,20 +122,21 @@ export class Simulator implements ISimulator {
   //this function handle the case of person in the aisle and in his ticket row number
   private handlePersonInHisRowButInAisle(person) {
     let isPersonBlocked = this.isPersonBlockedInRow(person);
-    if (isPersonBlocked && person.getDirection() !== Direction.LEAVE) {
+    let blockOther = person.getBlockedPerson();
+    if (isPersonBlocked && !blockOther) {
       this.notifyAllSittingBlockersOfPerson(person);
     }
     if (person.hasMoreLuggage()) {
       person.putLuggage();
     }
-    if (isPersonBlocked && !person.hasMoreLuggage()) {
+    if (isPersonBlocked && !person.hasMoreLuggage() && !blockOther) {
       //person needs to walk one step back
       if (person.getDirection() != Direction.BACKWARD) {
         this.tellPersonToWalkOneStepBack(person);
       }
       if (person.canMakeStep()) this.walkInAilse(person);
     }
-    if (!isPersonBlocked && !person.hasMoreLuggage()) {
+    if (blockOther || (!isPersonBlocked && !person.hasMoreLuggage())) {
       //person finished with his luggage and no one blocks him.
       //person can be here in 3 cases:
       //1. person start walk into his seat from the aisle.
@@ -145,7 +148,7 @@ export class Simulator implements ISimulator {
         person.getDirection() === Direction.BACKWARD
       ) {
         //person in his way out (trying to empty the row)
-        this.backToAisleSetPointers(person);
+        // this.backToAisleSetPointers(person);
         this.walkInAilse(person);
       } else {
         //person in his way in
@@ -156,19 +159,28 @@ export class Simulator implements ISimulator {
 
   private backToAisleSetPointers(person: IPerson): void {
     let actives = this.activePersons.getQueueAsArray();
-    let frontPerson = actives.filter(
-      p =>
-        p.position.column === this.plane.getCenter() &&
-        p.position.row > person.position.row
-    )[0];
-    let backPerson = actives
+    let frontPerson = actives
       .filter(
         p =>
           p.position.column === this.plane.getCenter() &&
-          p.position.row < person.position.row
+          p.position.row > person.position.row
       )
       .reverse()[0];
-
+    let backPerson = person.getBlockedPerson()
+      ? null
+      : actives.filter(
+          p =>
+            p.position.column === this.plane.getCenter() &&
+            p.position.row < person.position.row
+        )[0];
+    if (frontPerson && backPerson) {
+      frontPerson.setBackPerson(person);
+      backPerson.setFrontPerson(person);
+    } else if (frontPerson) {
+      frontPerson.setBackPerson(person);
+    } else if (backPerson) {
+      backPerson.setFrontPerson(person);
+    }
     person.setFrontPerson(frontPerson);
     person.setBackPerson(backPerson);
   }
@@ -183,10 +195,12 @@ export class Simulator implements ISimulator {
   //return true if person in the row
   private walkInRow(person: IPerson): boolean {
     let arrivedHisSeat = person.rowStep();
-    if (arrivedHisSeat) {
+    if (arrivedHisSeat && person.getDirection() !== Direction.LEAVE) {
       this.changePersonToBeInactive(person);
     } else if (this.isPersonInAisle(person)) {
       person.updateDirectionAccordinToTarget();
+      if (person.getDirection() === Direction.FORWARD)
+        this.backToAisleSetPointers(person);
       if (person.canMakeStep()) this.handlePersonInHisRowButInAisle(person);
     }
     return this.isPersonInAisle(person);
@@ -203,6 +217,7 @@ export class Simulator implements ISimulator {
       else if (backPerson) backPerson.setFrontPerson(null);
       person.setFrontPerson(null);
       person.setBackPerson(null);
+      person.setBlockedPerson(null);
     }
   }
 
@@ -241,17 +256,34 @@ export class Simulator implements ISimulator {
     this.inactivePersons.remove(toAdd);
     this.activePersons.addToQueueBefore(toAdd, before);
   }
+
+  //if there is person in newTarget, set this person to newTarget + 1
+  // private setPersonTargetInBlock(person: IPerson, newTarget: Position): void {
+  //   let personInNewTarget = this.activePersons.getPersonInTarget(newTarget);
+  //   if (personInNewTarget) {
+  //     let nextTarget: Position = {
+  //       row: newTarget.row + 1,
+  //       column: newTarget.column
+  //     };
+  //     this.setPersonTargetInBlock(personInNewTarget, nextTarget);
+  //   }
+  //   person.setTarget(newTarget);
+  // }
   //tell the blockers in the row to empty the row.
   private notifyAllSittingBlockersOfPerson(person: IPerson) {
-    let blockers: Array<IPerson> = this.getAllBlockersOfPerson(person);
+    let blockers: Array<IPerson> = this.getAllBlockersOfPerson(
+      person
+    ).reverse();
     let numOfBlockers: number = blockers.length;
     let rowNumber: number = blockers[0].getPosition().row;
     let aisleColumnNum: number = this.plane.getCenter();
     for (let i = 0; i < numOfBlockers; i++) {
       let blocker: IPerson = blockers[i];
-      blocker.setTarget({ column: aisleColumnNum, row: rowNumber + i + 1 });
+      let newTarget = { column: aisleColumnNum, row: rowNumber + i + 1 };
+      blocker.setTarget(newTarget);
       blocker.setBlockedPerson(person);
-      this.addToActiveBefore(blocker, person);
+      let beforePerson = i === 0 ? person : blockers[i - 1];
+      this.addToActiveBefore(blocker, beforePerson);
     }
   }
 

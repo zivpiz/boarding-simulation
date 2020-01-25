@@ -1,5 +1,5 @@
 import { IActivePersonsQueue, IPerson } from "./interfaces";
-import { Direction } from "./types";
+import { Direction, isEqualPos, Position } from './types';
 
 export default class ActivePersonsQueue implements IActivePersonsQueue {
   private passengers: IPerson[];
@@ -62,11 +62,13 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
       let isOther = activePerson !== person;
       let rightBlock =
         ticketColumn > column &&
+        activePerson.position.column > column &&
         activePos.column < ticketColumn &&
         activeTarget.column < ticketColumn;
       let leaverBlock = activePos.column === ticketColumn && isActiveLeave;
       let leftBlock =
         ticketColumn < column &&
+        activePerson.position.column < column &&
         activePos.column > ticketColumn &&
         activeTarget.column > ticketColumn;
       return (
@@ -88,11 +90,13 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
       let isOther = activePerson !== person;
       let rightBlock =
         ticketColumn > column &&
+        activePerson.position.column > column &&
         activePos.column < ticketColumn &&
         activeTarget.column < ticketColumn;
       let leaverBlock = activePos.column === ticketColumn && isActiveLeave;
       let leftBlock =
         ticketColumn < column &&
+        activePerson.position.column < column &&
         activePos.column > ticketColumn &&
         activeTarget.column > ticketColumn;
       return (
@@ -114,6 +118,11 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
 
   private getPersonIndex(person: IPerson) {
     return this.passengers.findIndex(element => element === person);
+  }
+
+  //return person in target if exists, else return null
+  getPersonInTarget(target: Position): IPerson {
+    return this.passengers.find(p => isEqualPos(p.target, target));
   }
 
   print() {

@@ -17,7 +17,7 @@ export default class Passengers implements IPassengers {
     this.plane.initSeats();
     this.passengers = this.initPersons(plane, numOfPassengers);
   }
-
+  
   getPassengers() {
     return this.passengers;
   }

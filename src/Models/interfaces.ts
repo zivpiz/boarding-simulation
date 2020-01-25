@@ -62,6 +62,8 @@ export interface IPerson {
   atTarget(): boolean;
   //return true if this person at his seat aisle
   atSeatAisle(): boolean;
+  //return true if this person at his seat aisle or after
+  atSeatAisleOrAfter(): boolean;
   //return true if this person at his seat row but not in the aisle
   atSeatRow(): boolean;
   //return true if direction = backward and backPerson
@@ -104,6 +106,8 @@ export interface IActivePersonsQueue {
   isPersonBlocked(person: IPerson): boolean;
   getAllBlockersOfPerson(person: IPerson): Array<IPerson>;
   forEach(lambda: (element: IPerson) => void);
+  //return person in target if exists, else return null
+  getPersonInTarget(target: Position): IPerson;
   print: () => void;
 }
 
