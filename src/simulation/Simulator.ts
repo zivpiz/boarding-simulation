@@ -166,9 +166,7 @@ export class Simulator implements ISimulator {
           p.position.row > person.position.row
       )
       .reverse()[0];
-    let backPerson = person.getBlockedPerson()
-      ? null
-      : actives.filter(
+    let backPerson = actives.filter(
           p =>
             p.position.column === this.plane.getCenter() &&
             p.position.row < person.position.row
