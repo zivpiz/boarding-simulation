@@ -167,10 +167,10 @@ export class Simulator implements ISimulator {
       )
       .reverse()[0];
     let backPerson = actives.filter(
-          p =>
-            p.position.column === this.plane.getCenter() &&
-            p.position.row < person.position.row
-        )[0];
+      p =>
+        p.position.column === this.plane.getCenter() &&
+        p.position.row < person.position.row
+    )[0];
     if (frontPerson && backPerson) {
       frontPerson.setBackPerson(person);
       backPerson.setFrontPerson(person);
@@ -184,8 +184,12 @@ export class Simulator implements ISimulator {
   }
 
   private walkInAilse(person: IPerson) {
+    let oldPos = person.position;
     let arrivedHisRow = person.aisleStep();
-    if (arrivedHisRow) {
+    let newPos = person.position;
+    let isSamePos =
+      oldPos.column === newPos.column && oldPos.row === newPos.row;
+    if (arrivedHisRow && !isSamePos) {
       this.handlePersonInHisRowButInAisle(person);
     }
   }
