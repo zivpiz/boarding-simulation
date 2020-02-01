@@ -8,17 +8,8 @@ import {
 import * as _ from "lodash";
 import Plane from "../Models/plane";
 import Person from "../Models/Person";
-import Passengers from "../Models/passengers";
 
 const getRandomFreeSeat = (aisleBlocks: Array<AisleBlock>): Seat => {
-  // console.log('blocks:', aisleBlocks)
-  aisleBlocks.forEach(block => {
-    console.log("******")
-    console.log('isFullyASssigned', block.fullyAssigned)
-    console.log('right', block.rightRow)
-    console.log('left', block.leftRow)
-    console.log("******")
-  })
   let block: AisleBlock = _.sample(
     _.shuffle(aisleBlocks.filter(block => !block.fullyAssigned))
   );
