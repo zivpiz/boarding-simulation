@@ -55,30 +55,31 @@ export const findBestSeatingMode = (
       result: -1
     };
   });
-  let mode = 1;
-  console.log(modes[mode]);
-  modes[mode].result = runSimulation(
-    numberOfRows,
-    spaceBetweenRows,
-    numberOfSeatsInHalfRow,
-    numberOfPassengers,
-    modes[mode].seatingMode,
-    modes[mode].ticketingMode
-  );
-  return [modes[mode]];
-  // modes.forEach(mode => {
-  //   console.log(mode);
-  //   mode.result = runSimulation(
-  //     numberOfRows,
-  //     spaceBetweenRows,
-  //     numberOfSeatsInHalfRow,
-  //     numberOfPassengers,
-  //     mode.seatingMode,
-  //     mode.ticketingMode
-  //   );
-  // });
-
+  // let mode = 1;
+  // console.log(modes[mode]);
+  // modes[mode].result = runSimulation(
+  //   numberOfRows,
+  //   spaceBetweenRows,
+  //   numberOfSeatsInHalfRow,
+  //   numberOfPassengers,
+  //   modes[mode].seatingMode,
+  //   modes[mode].ticketingMode
+  // );
+  // return [modes[mode]];
+  modes.forEach(mode => {
+    console.log(mode);
+    mode.result = runSimulation(
+      numberOfRows,
+      spaceBetweenRows,
+      numberOfSeatsInHalfRow,
+      numberOfPassengers,
+      mode.seatingMode,
+      mode.ticketingMode
+    );
+  });
+  //
   // return _.sortBy(modes, "result");
+  return modes;
 };
 
 export const createSnapshot = (rows, columns) => {

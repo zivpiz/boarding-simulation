@@ -11,6 +11,14 @@ import Person from "../Models/Person";
 import Passengers from "../Models/passengers";
 
 const getRandomFreeSeat = (aisleBlocks: Array<AisleBlock>): Seat => {
+  // console.log('blocks:', aisleBlocks)
+  aisleBlocks.forEach(block => {
+    console.log("******")
+    console.log('isFullyASssigned', block.fullyAssigned)
+    console.log('right', block.rightRow)
+    console.log('left', block.leftRow)
+    console.log("******")
+  })
   let block: AisleBlock = _.sample(
     _.shuffle(aisleBlocks.filter(block => !block.fullyAssigned))
   );
@@ -33,7 +41,7 @@ export function assignRandomly(
     person.ticket = { row: freeSeat.row, column: freeSeat.column };
     freeSeat.status = SeatStatus.ASSIGNED;
     seatBlock.assignedSeats++;
-    if (seatBlock.assignedSeats === 6) seatBlock.fullyAssigned = true;
+    if (seatBlock.assignedSeats === (plane.getCenter() * 2)) seatBlock.fullyAssigned = true;
   });
   return passengers;
 }
@@ -56,7 +64,7 @@ export function frontToBack(
       person.ticket = { row: seat.row, column: seat.column };
       seat.status = SeatStatus.ASSIGNED;
       block.assignedSeats++;
-      if (block.assignedSeats === 6) block.fullyAssigned = true;
+      if (block.assignedSeats === (plane.getCenter() * 2)) block.fullyAssigned = true;
       person_index++;
     }
     if (person_index >= passengers.length) break;
@@ -82,7 +90,7 @@ export function backToFront(
       person.ticket = { row: seat.row, column: seat.column };
       seat.status = SeatStatus.ASSIGNED;
       block.assignedSeats++;
-      if (block.assignedSeats === 6) block.fullyAssigned = true;
+      if (block.assignedSeats === (plane.getCenter() * 2)) block.fullyAssigned = true;
       person_index++;
     }
     if (person_index >= passengers.length) break;
