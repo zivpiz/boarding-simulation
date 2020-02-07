@@ -18,12 +18,15 @@
   },
   "homepage": "https://github.com/zivpiz/boarding-simulation#readme",
   "dependencies": {
+    "export-to-csv": "^0.2.1",
+    "fs": "0.0.1-security",
     "lodash": "^4.17.15",
     "ramda": "^0.26.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "devDependencies": {
+    "@types/node": "^13.7.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1"

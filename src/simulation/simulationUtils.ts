@@ -67,7 +67,7 @@ export const findBestSeatingMode = (
   // );
   // return [modes[mode]];
   modes.forEach(mode => {
-    console.log(mode);
+    // console.log(mode);
     mode.result = runSimulation(
       numberOfRows,
       spaceBetweenRows,

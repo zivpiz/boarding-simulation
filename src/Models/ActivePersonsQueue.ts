@@ -148,7 +148,7 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
         )
     );
 
-    console.log(`ActivePassengersQueue:`);
-    console.log(printedPassengers.join("\n"));
+    // console.log(`ActivePassengersQueue:`);
+    // console.log(printedPassengers.join("\n"));
   }
 }

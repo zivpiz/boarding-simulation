@@ -1,0 +1,7 @@
+﻿Simulation Results
+
+planeCapacity,numberOfRows,spaceBetweenRows,seatsInHalfRow,numberOfPassengers,random result,aisle_to_window result,window_to_isle result,front_to_back result,back_to_front result,bestSeatingMode
+12,3,1,2,3,8,12,9,12,16,"random"
+12,3,1,2,6,20,20,15,26,14,"back_to_front"
+12,3,1,2,9,22,38,21,44,33,"window_to_isle"
+12,3,1,2,12,53,51,28,43,46,"window_to_isle"

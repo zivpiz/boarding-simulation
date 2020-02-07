@@ -375,7 +375,7 @@ export class Simulator implements ISimulator {
       ""
     );
 
-    console.log(iterateSnap);
+    // console.log(iterateSnap);
     this.activePersons.print();
     this.inactivePersons.print();
   }
