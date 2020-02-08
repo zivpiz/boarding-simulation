@@ -29,8 +29,14 @@ export const runSimulation = (
     1 + 2 * numberOfSeatsInHalfRow
   );
 
-  const simulator = new Simulator(plane, boardingQueue, snapshot);
-  return simulator.simulate();
+  let maxIteratinos = 30000;
+  const simulator = new Simulator(plane, boardingQueue, snapshot, maxIteratinos, false);
+  try {
+    return simulator.simulate();
+  } catch (e) {
+    console.log("simulation with bug! " + e);
+    return null;
+  }
 };
 
 export const findBestSeatingMode = (

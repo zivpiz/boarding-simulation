@@ -91,7 +91,7 @@ export class InactivePersonsSet implements IInactivePersonsSet {
         )
     );
 
-    // console.log(`InActivePassengersQueue:`);
-    // console.log(printedPassengers.join("\n"));
+    console.log(`InActivePassengersQueue:`);
+    console.log(printedPassengers.join("\n"));
   }
 }

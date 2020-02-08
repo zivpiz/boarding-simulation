@@ -46,26 +46,31 @@ loop until everyone seat:
         2. direction === in/ out: person.rowStepToSeat();
 */
 export class Simulator implements ISimulator {
+  private debugMode: boolean;
   private plane: IPlane;
   private activePersons: IActivePersonsQueue;
   private inactivePersons: IInactivePersonsSet;
   private iterations: number;
   private snapshot: any;
+  private maxOfIterations;
 
-  constructor(plane: IPlane, queue: IActivePersonsQueue, snapshot: any) {
+  constructor(plane: IPlane, queue: IActivePersonsQueue, snapshot: any, maxOfIterations: number, debugMode: boolean) {
     this.plane = plane;
     this.activePersons = queue;
     this.inactivePersons = new InactivePersonsSet();
     this.iterations = 0;
     this.snapshot = snapshot;
+    this.maxOfIterations = maxOfIterations;
+    this.debugMode = debugMode;
   }
 
   simulate(): number {
     // this.toSnapshot();
     while (this.activePersons.length > 0) {
       //while there is someone who is not sitting
+      if (this.iterations > this.maxOfIterations) throw "too many iterations";
       this.iterations++;
-      this.toSnapshot();
+      if (this.debugMode) this.toSnapshot();
       let personsToIterate = this.activePersons.getQueueAsArray().slice(0);
       personsToIterate.forEach((person: IPerson) => {
         person.initPercentage();
@@ -79,10 +84,10 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
-        this.toSnapshot();
+        // this.toSnapshot();
       });
     }
-    this.toSnapshot();
+    // this.toSnapshot();
     return this.iterations;
   }
 
@@ -375,7 +380,7 @@ export class Simulator implements ISimulator {
       ""
     );
 
-    // console.log(iterateSnap);
+    console.log(iterateSnap);
     this.activePersons.print();
     this.inactivePersons.print();
   }
