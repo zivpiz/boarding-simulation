@@ -49,24 +49,26 @@ export const runStatistics = () => {
 
           const numberOfPassengers = Math.floor(numberOfSeats / 4) * i;
           const allSeatingModesSimulation = findBestSeatingMode(rows, spaceBetweenRows, seatsInHalfRow, numberOfPassengers, ticketingMode);
-          const bestSeatingMode = _.sortBy(allSeatingModesSimulation, "result")[0].seatingMode;
-
-          const currentResult = {
-            planeCapacity: numberOfSeats,
-            numberOfRows: rows,
-            spaceBetweenRows,
-            seatsInHalfRow,
-            numberOfPassengers,
-          };
-          allSeatingModesSimulation.forEach(seatingModeResult => {
-            _.assign(currentResult, {
-              [`${seatingModeResult.seatingMode} result`]: seatingModeResult.result
+          const hasNullResult = _.some(allSeatingModesSimulation, seatingModeResult => !seatingModeResult.result);
+          if (!hasNullResult) {
+            const bestSeatingMode = _.sortBy(allSeatingModesSimulation, "result")[0].seatingMode;
+            const currentResult = {
+              planeCapacity: numberOfSeats,
+              numberOfRows: rows,
+              spaceBetweenRows,
+              seatsInHalfRow,
+              numberOfPassengers,
+            };
+            allSeatingModesSimulation.forEach(seatingModeResult => {
+              _.assign(currentResult, {
+                [`${seatingModeResult.seatingMode} result`]: seatingModeResult.result
+              });
             });
-          });
-          _.assign(currentResult, {
-            bestSeatingMode
-          });
-          allResults.push(currentResult);
+            _.assign(currentResult, {
+              bestSeatingMode
+            });
+            allResults.push(currentResult);
+          }
         }
       }
     }
