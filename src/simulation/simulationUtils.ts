@@ -34,7 +34,6 @@ export const runSimulation = (
   try {
     return simulator.simulate();
   } catch (e) {
-    console.log("simulation with bug! " + e);
     return null;
   }
 };
