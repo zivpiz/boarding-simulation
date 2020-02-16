@@ -22,7 +22,6 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
     seatingMode,
     ticketingMode
   );
-  // console.log("User based simulation result is:", simulationResult);
   return simulationResult;
 };
 
@@ -49,9 +48,5 @@ const findBestSeatingModeForUserInput = (): Array<{
   );
 };
 
-// let results = findBestSeatingModeForUserInput().map((run, index) => {return {run: index, ...run}});
-// console.log("\n--------------Results:\n",...results);
 
 runStatistics();
-// let allResult = runStatistics();
-// console.log("\n--------------stats:\n", allResult);

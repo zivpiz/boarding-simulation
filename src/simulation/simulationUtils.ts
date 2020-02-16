@@ -60,19 +60,7 @@ export const findBestSeatingMode = (
       result: -1
     };
   });
-  // let mode = 1;
-  // console.log(modes[mode]);
-  // modes[mode].result = runSimulation(
-  //   numberOfRows,
-  //   spaceBetweenRows,
-  //   numberOfSeatsInHalfRow,
-  //   numberOfPassengers,
-  //   modes[mode].seatingMode,
-  //   modes[mode].ticketingMode
-  // );
-  // return [modes[mode]];
   modes.forEach(mode => {
-    // console.log(mode);
     mode.result = runSimulation(
       numberOfRows,
       spaceBetweenRows,
@@ -83,7 +71,6 @@ export const findBestSeatingMode = (
     );
   });
   //
-  // return _.sortBy(modes, "result");
   return modes;
 };
 
@@ -98,16 +85,3 @@ export const createSnapshot = (rows, columns) => {
 
   return snapshot;
 };
-
-// export const getTestPassengers = (plane: Plane) {
-//   let positionById = (id: number) => {row: -id}
-//   const numOfPassengers = 8;
-//   let costumPersons = new Array<Person>([
-//     Person.createTestPerson(plane.spaceBetweenRows, )
-//   ])
-//   const passengers = new Passengers(plane, numOfPassengers);
-//   passengers.passengers = costumPersons;
-//   passengers.assignTicketsBy(ticketingMode);
-//   passengers.boardingBy(seatingMode);
-//   const boardingQueue = new ActivePersonsQueue(passengers.getPassengers());
-// }

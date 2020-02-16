@@ -102,7 +102,6 @@ export default class Passengers implements IPassengers {
     return this.initPositions(passengers);
   }
 
-  // for example - composeSeatingMode(random, windowToAisle)(plane, passengers)
   static composeSeatingMode(
     ...modes
   ): (aisle: number, passengers: Array<Person>) => Array<Person> {

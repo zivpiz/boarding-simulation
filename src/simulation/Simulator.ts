@@ -65,9 +65,7 @@ export class Simulator implements ISimulator {
   }
 
   simulate(): number {
-    // this.toSnapshot();
     while (this.activePersons.length > 0) {
-      //while there is someone who is not sitting
       if (this.iterations > this.maxOfIterations) throw "too many iterations";
       this.iterations++;
       if (this.debugMode) this.toSnapshot();
@@ -84,44 +82,9 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
-        // this.toSnapshot();
       });
     }
-    // this.toSnapshot();
     return this.iterations;
-  }
-
-  // private debugg() {
-  //   this.printCurrentPositions();
-  //   const positionsList = this.activePersons
-  //     .getQueueAsArray()
-  //     .map(person => person.getPosition());
-  //   positionsList.forEach((position, currIndex) => {
-  //     if (
-  //       _.slice(positionsList, currIndex + 1).find(position2 =>
-  //         _.isEqual(position2, position)
-  //       )
-  //     ) {
-  //       throw Error("Same positions!~!");
-  //     }
-  //   });
-  // }
-  private printCurrentPositions() {
-    //   this.inactivePersons.forEach(person => {
-    //     console.log(
-    //       `inactive person ${person.id} position`,
-    //       person.getPosition()
-    //     );
-    //     console.log(`inactive person ${person.id} ticket`, person.getTicket());
-    //     console.log(`inactive person ${person.id} target`, person.getTarget());
-    //     console.log("");
-    //   });
-    //   this.activePersons.forEach(person => {
-    //     console.log(`active person ${person.id} position`, person.getPosition());
-    //     console.log(`active person ${person.id} ticket`, person.getTicket());
-    //     console.log(`active person ${person.id} target`, person.getTarget());
-    //     console.log("");
-    //   });
   }
 
   //this function handle the case of person in the aisle and in his ticket row number
@@ -152,8 +115,6 @@ export class Simulator implements ISimulator {
         person.getDirection() === Direction.FORWARD ||
         person.getDirection() === Direction.BACKWARD
       ) {
-        //person in his way out (trying to empty the row)
-        // this.backToAisleSetPointers(person);
         this.walkInAilse(person);
       } else {
         //person in his way in
@@ -264,18 +225,6 @@ export class Simulator implements ISimulator {
     this.activePersons.addToQueueBefore(toAdd, before);
   }
 
-  //if there is person in newTarget, set this person to newTarget + 1
-  // private setPersonTargetInBlock(person: IPerson, newTarget: Position): void {
-  //   let personInNewTarget = this.activePersons.getPersonInTarget(newTarget);
-  //   if (personInNewTarget) {
-  //     let nextTarget: Position = {
-  //       row: newTarget.row + 1,
-  //       column: newTarget.column
-  //     };
-  //     this.setPersonTargetInBlock(personInNewTarget, nextTarget);
-  //   }
-  //   person.setTarget(newTarget);
-  // }
   //tell the blockers in the row to empty the row.
   private notifyAllSittingBlockersOfPerson(person: IPerson) {
     let blockers: Array<IPerson> = this.getAllBlockersOfPerson(
@@ -366,9 +315,6 @@ export class Simulator implements ISimulator {
             const isLegalRow =
               column === this.plane.centerColumn ||
               this.plane.aisle[row].hasRows;
-            // (row !== 0 &&
-            //   row <= this.plane.rows &&
-            //   row % this.plane.spaceBetweenRows === 0);
 
             return isLegalRow
               ? `<${row},${column}> [${person !== null ? person : " "}] ${

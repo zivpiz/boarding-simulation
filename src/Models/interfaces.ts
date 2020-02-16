@@ -141,13 +141,7 @@ export interface IPassengers {
 
 export interface ISimulator {
   getPlane(): IPlane;
-  // passangers: IPassengers;
   getIterations(): number;
-  //while not all passengers sitting
-  //foreach manager.queue: person, person.aisleStep()
-  //if person.aisleStep() === true && seatBlockedBy(person) --> askToChangeTargets
-  //iterations++
-  //returns iterations
   simulate(): number;
   toSnapshot(): void;
 }

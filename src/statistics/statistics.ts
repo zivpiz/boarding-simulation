@@ -1,6 +1,4 @@
 import * as fs from 'fs';
-// const fs = require('fs');
-// import {fs} from 'fs';
 import * as _ from 'lodash';
 import { ExportToCsv } from 'export-to-csv';
 import { TicketAssignmetMode } from '../Models/types';
@@ -49,26 +47,23 @@ export const runStatistics = () => {
 
           const numberOfPassengers = Math.floor(numberOfSeats / 4) * i;
           const allSeatingModesSimulation = findBestSeatingMode(rows, spaceBetweenRows, seatsInHalfRow, numberOfPassengers, ticketingMode);
-          const hasNullResult = _.some(allSeatingModesSimulation, seatingModeResult => !seatingModeResult.result);
-          if (!hasNullResult) {
-            const bestSeatingMode = _.sortBy(allSeatingModesSimulation, "result")[0].seatingMode;
-            const currentResult = {
-              planeCapacity: numberOfSeats,
-              numberOfRows: rows,
-              spaceBetweenRows,
-              seatsInHalfRow,
-              numberOfPassengers,
-            };
-            allSeatingModesSimulation.forEach(seatingModeResult => {
-              _.assign(currentResult, {
-                [`${seatingModeResult.seatingMode} result`]: seatingModeResult.result
-              });
-            });
+          const bestSeatingMode = _.sortBy(allSeatingModesSimulation, "result")[0].seatingMode;
+          const currentResult = {
+            planeCapacity: numberOfSeats,
+            numberOfRows: rows,
+            spaceBetweenRows,
+            seatsInHalfRow,
+            numberOfPassengers,
+          };
+          allSeatingModesSimulation.forEach(seatingModeResult => {
             _.assign(currentResult, {
-              bestSeatingMode
+              [`${seatingModeResult.seatingMode} result`]: seatingModeResult.result
             });
-            allResults.push(currentResult);
-          }
+          });
+          _.assign(currentResult, {
+            bestSeatingMode
+          });
+          allResults.push(currentResult);
         }
       }
     }
