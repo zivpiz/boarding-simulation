@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import * as R from "ramda";
 import Person from "../Models/Person";
 
 export function random(aisle: number, passengers: Array<Person>) {
@@ -34,39 +33,4 @@ export function frontToBack(aisle: number, passengers: Array<Person>) {
     (personA: Person, personB: Person): number =>
       personA.ticket.row - personB.ticket.row
   );
-}
-
-export function frontToBackWindowToAisle(
-  aisle: number,
-  passengers: Array<Person>
-) {
-  return composeSeatingMode(windowToAisle, frontToBack)(aisle, passengers);
-}
-
-export function frontToBackAisleToWindow(
-  aisle: number,
-  passengers: Array<Person>
-) {
-  return composeSeatingMode(aisleToWindow, frontToBack)(aisle, passengers);
-}
-
-export function backToFrontWindowToAisle(
-  aisle: number,
-  passengers: Array<Person>
-) {
-  return composeSeatingMode(windowToAisle, backToFront)(aisle, passengers);
-}
-
-export function backToFrontAisleToWindow(
-  aisle: number,
-  passengers: Array<Person>
-) {
-  return composeSeatingMode(aisleToWindow, backToFront)(aisle, passengers);
-}
-
-// for example - composeSeatingMode(random, windowToAisle)(plane, passengers)
-function composeSeatingMode(
-  ...modes
-): (aisle: number, passengers: Array<Person>) => Array<Person> {
-  return R.compose(...modes);
 }

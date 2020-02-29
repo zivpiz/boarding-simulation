@@ -96,28 +96,19 @@ export default class Passengers implements IPassengers {
         passengers = seatingMethods.frontToBack(asile, this.passengers);
         break;
       case SeatingMode.frontToBackWindowToAisle:
-        passengers = seatingMethods.frontToBackWindowToAisle(
-          asile,
-          this.passengers
-        );
+        passengers = seatingMethods.frontToBack(asile, this.passengers);
+        passengers = seatingMethods.windowToAisle(asile, this.passengers);
         break;
       case SeatingMode.frontToBackAisleToWindow:
-        passengers = seatingMethods.frontToBackAisleToWindow(
-          asile,
-          this.passengers
-        );
+        passengers = seatingMethods.frontToBack(asile, this.passengers);
+        passengers = seatingMethods.aisleToWindow(asile, this.passengers);
         break;
       case SeatingMode.backToFrontWindowToAisle:
-        passengers = seatingMethods.backToFrontWindowToAisle(
-          asile,
-          this.passengers
-        );
+        passengers = seatingMethods.backToFront(asile, this.passengers);
+        passengers = seatingMethods.windowToAisle(asile, this.passengers);
         break;
-      case SeatingMode.backToFrontAisleToWindow:
-        passengers = seatingMethods.backToFrontAisleToWindow(
-          asile,
-          this.passengers
-        );
+        passengers = seatingMethods.backToFront(asile, this.passengers);
+        passengers = seatingMethods.aisleToWindow(asile, this.passengers);
         break;
       default:
         passengers = seatingMethods.random(asile, this.passengers);
