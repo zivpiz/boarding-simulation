@@ -17,7 +17,7 @@ export default class Passengers implements IPassengers {
     this.plane.initSeats();
     this.passengers = this.initPersons(plane, numOfPassengers);
   }
-  
+
   getPassengers() {
     return this.passengers;
   }
@@ -94,6 +94,30 @@ export default class Passengers implements IPassengers {
         break;
       case SeatingMode.FRONT_TO_BACK:
         passengers = seatingMethods.frontToBack(asile, this.passengers);
+        break;
+      case SeatingMode.frontToBackWindowToAisle:
+        passengers = seatingMethods.frontToBackWindowToAisle(
+          asile,
+          this.passengers
+        );
+        break;
+      case SeatingMode.frontToBackAisleToWindow:
+        passengers = seatingMethods.frontToBackAisleToWindow(
+          asile,
+          this.passengers
+        );
+        break;
+      case SeatingMode.backToFrontWindowToAisle:
+        passengers = seatingMethods.backToFrontWindowToAisle(
+          asile,
+          this.passengers
+        );
+        break;
+      case SeatingMode.backToFrontAisleToWindow:
+        passengers = seatingMethods.backToFrontAisleToWindow(
+          asile,
+          this.passengers
+        );
         break;
       default:
         passengers = seatingMethods.random(asile, this.passengers);
