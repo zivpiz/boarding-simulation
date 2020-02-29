@@ -5,7 +5,11 @@ export enum SeatingMode {
   AISLE_TO_WINDOW = "aisle_to_window",
   WINDOW_TO_AISLE = "window_to_isle",
   FRONT_TO_BACK = "front_to_back",
-  BACK_TO_FRONT = "back_to_front"
+  BACK_TO_FRONT = "back_to_front",
+  frontToBackWindowToAisle = "frontToBackWindowToAisle",
+  frontToBackAisleToWindow = "frontToBackAisleToWindow",
+  backToFrontWindowToAisle = "backToFrontWindowToAisle",
+  backToFrontAisleToWindow = "backToFrontAisleToWindow"
 }
 
 export type AisleBlock = {

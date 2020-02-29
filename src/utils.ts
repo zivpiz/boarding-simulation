@@ -13,14 +13,15 @@ const createHalfRow = (
   side: string
 ): Array<Seat> => {
   let seats = new Array<Seat>(numOfSeats);
-  for (let index = 0; index < numOfSeats; index++){
-     seats[index] = side === "left"
-      ? { status: SeatStatus.FREE, row: rowNumber, column: index }
-      : {
-          status: SeatStatus.FREE,
-          row: rowNumber,
-          column: index + numOfSeats + 1
-        };
+  for (let index = 0; index < numOfSeats; index++) {
+    seats[index] =
+      side === "left"
+        ? { status: SeatStatus.FREE, row: rowNumber, column: index }
+        : {
+            status: SeatStatus.FREE,
+            row: rowNumber,
+            column: index + numOfSeats + 1
+          };
   }
   return seats;
 };
@@ -50,16 +51,17 @@ export const generateRandomSpeed = (
   maxSpeed = 1,
   maxLuggade = 3
 ): number => {
-  switch (axis) {
-    case Speed.X:
-      return generateRandomNatNumber(1, maxSpeed);
-    case Speed.Y:
-      return generateRandomNatNumber(1, maxSpeed);
-    case Speed.LUGGADE:
-      return generateRandomNatNumber(1, maxLuggade);
-    default:
-      return 1;
-  }
+  // switch (axis) {
+  //   case Speed.X:
+  //     return generateRandomNatNumber(1, maxSpeed);
+  //   case Speed.Y:
+  //     return generateRandomNatNumber(1, maxSpeed);
+  //   case Speed.LUGGADE:
+  //     return generateRandomNatNumber(1, maxLuggade);
+  //   default:
+  //     return 1;
+  // }
+  return Infinity;
 };
 
 export const generateRandomNatNumber = (
