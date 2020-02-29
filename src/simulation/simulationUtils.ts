@@ -83,8 +83,8 @@ export const findBestSeatingMode = (
     );
   });
   //
-  // return _.sortBy(modes, "result");
-  return modes;
+  return _.sortBy(modes, "result");
+  // return modes;
 };
 
 export const createSnapshot = (rows, columns) => {
