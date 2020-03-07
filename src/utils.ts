@@ -61,7 +61,7 @@ export const generateRandomSpeed = (
   //   default:
   //     return 1;
   // }
-  return Infinity;
+  // return Infinity;
 };
 
 export const generateRandomNatNumber = (

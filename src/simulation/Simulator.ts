@@ -54,7 +54,13 @@ export class Simulator implements ISimulator {
   private snapshot: any;
   private maxOfIterations;
 
-  constructor(plane: IPlane, queue: IActivePersonsQueue, snapshot: any, maxOfIterations: number, debugMode: boolean) {
+  constructor(
+    plane: IPlane,
+    queue: IActivePersonsQueue,
+    snapshot: any,
+    maxOfIterations: number,
+    debugMode: boolean
+  ) {
     this.plane = plane;
     this.activePersons = queue;
     this.inactivePersons = new InactivePersonsSet();

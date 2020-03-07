@@ -46,7 +46,13 @@ export const runSimulation = (
   );
 
   let maxIteratinos = 30000;
-  const simulator = new Simulator(plane, boardingQueue, snapshot, maxIteratinos, false);
+  const simulator = new Simulator(
+    plane,
+    boardingQueue,
+    snapshot,
+    maxIteratinos,
+    true
+  );
   try {
     return simulator.simulate();
   } catch (e) {

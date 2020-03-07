@@ -1,10 +1,10 @@
-import { SeatingMode, TicketAssignmetMode } from './types'
-import { IPassengers } from './interfaces'
-import * as ticketingMethods from '../Strategies/ticketing-methods'
-import * as seatingMethods from '../Strategies/seating-methods'
-import * as R from 'ramda'
-import Plane from './Plane'
-import Person from './Person'
+import { SeatingMode, TicketAssignmetMode } from "./types";
+import { IPassengers } from "./interfaces";
+import * as ticketingMethods from "../Strategies/ticketing-methods";
+import * as seatingMethods from "../Strategies/seating-methods";
+import * as R from "ramda";
+import Plane from "./Plane";
+import Person from "./Person";
 
 export default class Passengers implements IPassengers {
   passengers: Array<Person>;
@@ -96,30 +96,6 @@ export default class Passengers implements IPassengers {
         passengers = seatingMethods.frontToBack(asile, this.passengers);
         break;
       case SeatingMode.frontToBackWindowToAisle:
-<<<<<<< HEAD
-        passengers = seatingMethods.frontToBackWindowToAisle(
-          asile,
-          this.passengers
-        );
-        break;
-      case SeatingMode.frontToBackAisleToWindow:
-        passengers = seatingMethods.frontToBackAisleToWindow(
-          asile,
-          this.passengers
-        );
-        break;
-      case SeatingMode.backToFrontWindowToAisle:
-        passengers = seatingMethods.backToFrontWindowToAisle(
-          asile,
-          this.passengers
-        );
-        break;
-      case SeatingMode.backToFrontAisleToWindow:
-        passengers = seatingMethods.backToFrontAisleToWindow(
-          asile,
-          this.passengers
-        );
-=======
         passengers = seatingMethods.frontToBack(asile, this.passengers);
         passengers = seatingMethods.windowToAisle(asile, this.passengers);
         break;
@@ -134,7 +110,6 @@ export default class Passengers implements IPassengers {
       case SeatingMode.backToFrontAisleToWindow:
         passengers = seatingMethods.backToFront(asile, this.passengers);
         passengers = seatingMethods.aisleToWindow(asile, this.passengers);
->>>>>>> master
         break;
       default:
         passengers = seatingMethods.random(asile, this.passengers);
