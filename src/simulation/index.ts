@@ -51,7 +51,7 @@ const findBestSeatingModeForUserInput = (): Array<{
 
 // let results = findBestSeatingModeForUserInput().map((run, index) => {return {run: index, ...run}});
 // console.log("\n--------------Results:\n",...results);
-
-runStatistics();
+console.log('userInput:', userInput)
+console.log('result:', findBestSeatingModeForUserInput());
 // let allResult = runStatistics();
 // console.log("\n--------------stats:\n", allResult);

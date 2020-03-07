@@ -6,6 +6,22 @@ import Passengers from "../Models/passengers";
 import ActivePersonsQueue from "../Models/ActivePersonsQueue";
 import { Simulator } from "./Simulator";
 
+export const runAverageBasedSimulation = (
+  numberOfRows: number,
+  spaceBetweenRows: number,
+  numberOfSeatsInHalfRow: number,
+  numberOfPassengers: number,
+  seatingMode: SeatingMode,
+  ticketingMode: TicketAssignmetMode,
+  iterations = 20,
+) => {
+  let resultAcc = 0
+  for (let i = 0; i <= iterations; i++) {
+    resultAcc += runSimulation(numberOfRows, spaceBetweenRows, numberOfSeatsInHalfRow, numberOfPassengers, seatingMode, ticketingMode)
+  }
+  return resultAcc / iterations
+}
+
 export const runSimulation = (
   numberOfRows: number,
   spaceBetweenRows: number,
@@ -73,7 +89,7 @@ export const findBestSeatingMode = (
   // return [modes[mode]];
   modes.forEach(mode => {
     // console.log(mode);
-    mode.result = runSimulation(
+    mode.result = runAverageBasedSimulation(
       numberOfRows,
       spaceBetweenRows,
       numberOfSeatsInHalfRow,
@@ -83,8 +99,8 @@ export const findBestSeatingMode = (
     );
   });
   //
-  // return _.sortBy(modes, "result");
-  return modes;
+  return _.sortBy(modes, "result");
+  // return modes;
 };
 
 export const createSnapshot = (rows, columns) => {
