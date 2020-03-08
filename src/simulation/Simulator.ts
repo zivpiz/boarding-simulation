@@ -1,6 +1,3 @@
-import Plane from "../Models/plane";
-import Person from "../Models/Person";
-import Passengers from "../Models/passengers";
 import {
   ISimulator,
   IPlane,
@@ -10,7 +7,6 @@ import {
 } from "../Models/interfaces";
 import { Direction, Position } from "../Models/types";
 import { InactivePersonsSet } from "../Models/InactivePersonsSet";
-import * as _ from "lodash";
 
 /*
 loop until everyone seat:
@@ -84,44 +80,9 @@ export class Simulator implements ISimulator {
             this.walkInRow(person);
           }
         }
-        // this.toSnapshot();
       });
     }
-    // this.toSnapshot();
     return this.iterations;
-  }
-
-  // private debugg() {
-  //   this.printCurrentPositions();
-  //   const positionsList = this.activePersons
-  //     .getQueueAsArray()
-  //     .map(person => person.getPosition());
-  //   positionsList.forEach((position, currIndex) => {
-  //     if (
-  //       _.slice(positionsList, currIndex + 1).find(position2 =>
-  //         _.isEqual(position2, position)
-  //       )
-  //     ) {
-  //       throw Error("Same positions!~!");
-  //     }
-  //   });
-  // }
-  private printCurrentPositions() {
-    //   this.inactivePersons.forEach(person => {
-    //     console.log(
-    //       `inactive person ${person.id} position`,
-    //       person.getPosition()
-    //     );
-    //     console.log(`inactive person ${person.id} ticket`, person.getTicket());
-    //     console.log(`inactive person ${person.id} target`, person.getTarget());
-    //     console.log("");
-    //   });
-    //   this.activePersons.forEach(person => {
-    //     console.log(`active person ${person.id} position`, person.getPosition());
-    //     console.log(`active person ${person.id} ticket`, person.getTicket());
-    //     console.log(`active person ${person.id} target`, person.getTarget());
-    //     console.log("");
-    //   });
   }
 
   //this function handle the case of person in the aisle and in his ticket row number

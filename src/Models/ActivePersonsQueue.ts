@@ -26,7 +26,6 @@ export default class ActivePersonsQueue implements IActivePersonsQueue {
       before.setFrontPerson(personToAdd);
       let index = this.getPersonIndex(before);
       if (index < 0) throw '"before" person is not in Active Queue passengers';
-      // personToAdd.setFrontPerson(this.passengers[index + 1]);
       this.passengers.splice(index, 0, personToAdd);
       this.length++;
     }

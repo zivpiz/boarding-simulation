@@ -1,7 +1,6 @@
 import userInput from "./userInput";
 import { SeatingMode, TicketAssignmetMode } from "../Models/types";
 import { findBestSeatingMode, runSimulation } from "./simulationUtils";
-import { runStatistics } from '../statistics/statistics';
 
 //Gets parameters from user input, including seating mode and returns the simulation result
 const simulateBasedOnUserInputWithSeatingMode = (): number => {
@@ -22,7 +21,6 @@ const simulateBasedOnUserInputWithSeatingMode = (): number => {
     seatingMode,
     ticketingMode
   );
-  // console.log("User based simulation result is:", simulationResult);
   return simulationResult;
 };
 
@@ -49,9 +47,5 @@ const findBestSeatingModeForUserInput = (): Array<{
   );
 };
 
-// let results = findBestSeatingModeForUserInput().map((run, index) => {return {run: index, ...run}});
-// console.log("\n--------------Results:\n",...results);
 console.log('userInput:', userInput)
 console.log('result:', findBestSeatingModeForUserInput());
-// let allResult = runStatistics();
-// console.log("\n--------------stats:\n", allResult);

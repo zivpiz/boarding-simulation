@@ -223,14 +223,6 @@ export default class Person implements IPerson {
         ? frontPerson.getPosition().row - 1
         : this.target.row
       : this.target.row;
-    // let farthestRowTarget = this.frontPerson
-    //   ? this.target.row >= this.frontPerson.position.row
-    //     ? this.frontPerson.atSeatAisleOrAfter() &&
-    //       this.frontPerson.getBlockedPerson() !== this
-    //       ? this.frontPerson.getTicket().row - 2
-    //       : this.frontPerson.getPosition().row - 1
-    //     : this.target.row
-    //   : this.target.row;
     let steps = Math.abs(farthestRowTarget - this.position.row);
     steps = Math.min(steps, this.ySpeed);
     return this.getMaxStepsOfCurrPrecentage(steps, Speed.Y);
@@ -242,35 +234,22 @@ export default class Person implements IPerson {
   private getBackwardYSteps(): number {
     let blockedPerson = this.getBlockedPerson();
     let backPerson = this.getBackPerson();
-    // let farthestRowTarget1 = blockedinRow
-    //   ? this.position.row
-    //   : this.backPerson && this.backPerson !== this.blockedPerson
-    //   ? this.target.row <= this.backPerson.position.row
-    //     ? this.backPerson.position.row + 1
-    //     : this.target.row
-    //   : this.target.row;
     let farthestRowTarget = !backPerson
       ? this.target.row
       : blockedPerson
         ? !blockedPerson.atSeatRow()
           ? blockedPerson.position.row >= backPerson.position.row
             ? Math.max(this.target.row, blockedPerson.position.row + 1)
-            : this.position.row//Math.max(this.target.row, backPerson.position.row + 1)// backPerson.position.row < this.target.row
-              // ? blockedPerson.atSeatRow()
-              //   ? this.target.row
-              //   : Math.max(this.target.row, blockedPerson.position.row + 1)
-              // : backPerson.target.row + 1
+            : this.position.row
           : Math.max(this.target.row, backPerson.position.row + 1)
         : Math.max(this.target.row, backPerson.position.row + 1)
 
     let steps = Math.abs(farthestRowTarget - this.position.row);
     steps = Math.min(steps, this.ySpeed);
     return this.getMaxStepsOfCurrPrecentage(steps, Speed.Y);
-    // return this.getValuePerPrecentage(this.percentage, farAsPossible);
   }
   private getEnterXSteps(): number {
     return this.getMaxStepsOfCurrPrecentage(this.xSpeed, Speed.X);
-    // return this.getValuePerPrecentage(this.percentage, 1);
   }
   //return true if this person at his seat row but not in the aisle
   atSeatRow(): boolean {
@@ -294,7 +273,6 @@ export default class Person implements IPerson {
           : 0
         : 1;
     return this.getMaxStepsOfCurrPrecentage(step, Speed.X);
-    // return this.getValuePerPrecentage(this.percentage, step);
   }
   //return true if direction = backward and backPerson
   //block this from step steps back in current iteration
@@ -337,12 +315,6 @@ export default class Person implements IPerson {
       aisleSteps,
       this.direction
     );
-    // let backBlock: boolean = this.isBackBlocked(aisleSteps, newPosition);
-    // if (backBlock)
-    //   this.askOtherToChangeTarget(
-    //     this.backPerson,
-    //     this.newPositionByDir(1, Direction.BACKWARD)
-    //   );
     this.decreasePercentageBy(
       this.precentagePerSpeedValue(aisleSteps, Speed.Y)
     );
@@ -368,7 +340,6 @@ export default class Person implements IPerson {
   hasMoreLuggage(): boolean {
     return this.luggageCount !== 0;
   }
-  //this.position === this.ticket center of aisle
   updateDirectionAccordinToTarget(): Direction {
     let newDir: Direction;
     let centerPos: Position = this.position;
@@ -384,7 +355,6 @@ export default class Person implements IPerson {
       newDir = Direction.ENTER;
       this.setBlockedPerson(null);
     } else {
-      // console.log("PERSON", this);
       throw "This Person is not in the middle of his seat ticket aisle";
     }
     this.direction = newDir;
